@@ -93,8 +93,5 @@ description: 3D 建模与渲染设计师：建模、材质、灯光与镜头的�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- full-stack-skills/design-skills (Apache-2.0)
-- BULDEE/claude-creative-studio (待核实)
 >
 > 工种 key：`3d-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

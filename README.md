@@ -181,7 +181,7 @@ npm run check:all
 - [AI 工具目录规则](docs/AI工具目录规则.md) — **安装前必读**：全局 / 项目技能目录真实规则与官方出处
 - [多 AI 工具安装指南](docs/install-by-tool.md) — 探测、软链对账、幂等与版本升级
 - [快速上手](docs/quickstart.md)
-- [开源资料与致谢](docs/开源资料与致谢.md) — GitHub 调研结果与许可红线
+- [开源资料与致谢](docs/开源资料与致谢.md) — 许可红线与借鉴边界
 - [开发待办](docs/todo.md)
 
 ## 许可

@@ -5,7 +5,12 @@
     "core": "高频、AI 可交付产物明确的工种，生成独立 SKILL.md + 专属流水线 + 产物模板",
     "extended": "长尾或强依赖线下打样/CAD/材料的工种，只在工种索引登记，由通用兜底流水线承接，避免命令爆炸与假交付"
   },
-  "domains": ["数字产品", "平面品牌", "空间与实体", "商业与新兴"],
+  "domains": [
+    "数字产品",
+    "平面品牌",
+    "空间与实体",
+    "商业与新兴"
+  ],
   "shared_references": [
     "工种索引.md",
     "工种通用流水线.md",
@@ -19,283 +24,934 @@
   ],
   "disciplines": [
     {
-      "key": "ui-design", "name": "UI 设计师", "en": "UI Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["UI设计", "界面设计", "界面视觉稿", "组件界面", "控件设计"],
+      "key": "ui-design",
+      "name": "UI 设计师",
+      "en": "UI Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "UI设计",
+        "界面设计",
+        "界面视觉稿",
+        "组件界面",
+        "控件设计"
+      ],
       "summary": "负责界面的视觉层：组件、状态、密度、色彩与字号的落地一致性。",
-      "pipeline": ["第0阶段·现状确认（现有设计系统/组件库/品牌/参考）", "设计简报与目标", "信息架构与页面结构", "视觉方向与组件清单", "界面稿与状态覆盖", "组件规格与令牌", "评审与走查", "交付与验收"],
-      "artifacts": ["设计简报", "页面结构表", "组件规格", "设计令牌", "界面走查记录"],
-      "references": ["数字产品质量基线.md", "可访问性细则.md", "视觉与品牌基础.md"],
-      "sources": ["nextlevelbuilder/ui-ux-pro-max-skill (MIT)", "jakubkrehel/skills (MIT)"]
+      "pipeline": [
+        "第0阶段·现状确认（现有设计系统/组件库/品牌/参考）",
+        "设计简报与目标",
+        "信息架构与页面结构",
+        "视觉方向与组件清单",
+        "界面稿与状态覆盖",
+        "组件规格与令牌",
+        "评审与走查",
+        "交付与验收"
+      ],
+      "artifacts": [
+        "设计简报",
+        "页面结构表",
+        "组件规格",
+        "设计令牌",
+        "界面走查记录"
+      ],
+      "references": [
+        "数字产品质量基线.md",
+        "可访问性细则.md",
+        "视觉与品牌基础.md"
+      ]
     },
     {
-      "key": "ux-design", "name": "UX 体验设计师", "en": "UX Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["UX设计", "体验设计", "用户体验优化", "体验路径"],
+      "key": "ux-design",
+      "name": "UX 体验设计师",
+      "en": "UX Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "UX设计",
+        "体验设计",
+        "用户体验优化",
+        "体验路径"
+      ],
       "summary": "负责端到端体验：任务流、信息层级、认知负荷与失败路径。",
-      "pipeline": ["第0阶段·现状确认（现有产品/数据/用户反馈）", "体验目标与成功标准", "用户与场景", "任务流与旅程图", "信息架构", "关键路径原型", "可用性验证", "迭代建议"],
-      "artifacts": ["体验简报", "用户旅程图", "任务流", "信息架构", "可用性验证记录"],
-      "references": ["数字产品质量基线.md", "工种通用流水线.md"],
-      "sources": ["julianoczkowski/designer-skills (Apache-2.0)", "full-stack-skills/design-skills (Apache-2.0)"]
+      "pipeline": [
+        "第0阶段·现状确认（现有产品/数据/用户反馈）",
+        "体验目标与成功标准",
+        "用户与场景",
+        "任务流与旅程图",
+        "信息架构",
+        "关键路径原型",
+        "可用性验证",
+        "迭代建议"
+      ],
+      "artifacts": [
+        "体验简报",
+        "用户旅程图",
+        "任务流",
+        "信息架构",
+        "可用性验证记录"
+      ],
+      "references": [
+        "数字产品质量基线.md",
+        "工种通用流水线.md"
+      ]
     },
     {
-      "key": "interaction-design", "name": "交互设计师", "en": "Interaction Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["交互设计", "交互规则", "手势设计", "反馈机制", "状态机设计"],
+      "key": "interaction-design",
+      "name": "交互设计师",
+      "en": "Interaction Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "交互设计",
+        "交互规则",
+        "手势设计",
+        "反馈机制",
+        "状态机设计"
+      ],
       "summary": "负责行为层：状态机、反馈、动效触发条件、异常与边界状态。",
-      "pipeline": ["第0阶段·现状确认（平台规范/现有交互模式）", "行为目标", "状态与事件清单", "状态机与转移表", "反馈与动效时机", "异常/空/加载态", "交互规格", "走查验收"],
-      "artifacts": ["状态机表", "交互规格", "反馈与动效表", "边界状态清单"],
-      "references": ["数字产品质量基线.md", "可访问性细则.md"],
-      "sources": ["jakubkrehel/skills (MIT)", "full-stack-skills/design-skills (Apache-2.0)"]
+      "pipeline": [
+        "第0阶段·现状确认（平台规范/现有交互模式）",
+        "行为目标",
+        "状态与事件清单",
+        "状态机与转移表",
+        "反馈与动效时机",
+        "异常/空/加载态",
+        "交互规格",
+        "走查验收"
+      ],
+      "artifacts": [
+        "状态机表",
+        "交互规格",
+        "反馈与动效表",
+        "边界状态清单"
+      ],
+      "references": [
+        "数字产品质量基线.md",
+        "可访问性细则.md"
+      ]
     },
     {
-      "key": "product-design", "name": "产品设计师", "en": "Product Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["产品设计", "功能设计", "端到端设计", "产品方案设计"],
+      "key": "product-design",
+      "name": "产品设计师",
+      "en": "Product Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "产品设计",
+        "功能设计",
+        "端到端设计",
+        "产品方案设计"
+      ],
       "summary": "贯通问题定义到交付的全流程设计，对业务目标与体验结果同时负责。",
-      "pipeline": ["第0阶段·现状确认（产品/需求来源/设计系统）", "问题与目标", "用户与场景", "信息架构", "概念与原型", "视觉与组件规格", "评审", "交付", "验证与迭代"],
-      "artifacts": ["设计简报", "用户流程", "线框图", "设计规格", "评审记录", "验收清单"],
-      "references": ["数字产品质量基线.md", "视觉与品牌基础.md", "可访问性细则.md"],
-      "sources": ["julianoczkowski/designer-skills (Apache-2.0)"]
+      "pipeline": [
+        "第0阶段·现状确认（产品/需求来源/设计系统）",
+        "问题与目标",
+        "用户与场景",
+        "信息架构",
+        "概念与原型",
+        "视觉与组件规格",
+        "评审",
+        "交付",
+        "验证与迭代"
+      ],
+      "artifacts": [
+        "设计简报",
+        "用户流程",
+        "线框图",
+        "设计规格",
+        "评审记录",
+        "验收清单"
+      ],
+      "references": [
+        "数字产品质量基线.md",
+        "视觉与品牌基础.md",
+        "可访问性细则.md"
+      ]
     },
     {
-      "key": "visual-design", "name": "视觉设计师", "en": "Visual Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["视觉设计", "视觉方向", "视觉风格", "画面调性"],
+      "key": "visual-design",
+      "name": "视觉设计师",
+      "en": "Visual Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "视觉设计",
+        "视觉方向",
+        "视觉风格",
+        "画面调性"
+      ],
       "summary": "定调视觉语言：构图、色彩、字体、图形与质感的统一表达。",
-      "pipeline": ["第0阶段·现状确认（品牌/参考/竞品）", "视觉目标与情绪板", "色彩与字体系统", "构图与网格", "图形与质感", "多方案对比", "定稿与规范", "交付与走查"],
-      "artifacts": ["情绪板", "视觉方向提案", "色彩与字体规范", "视觉规范", "走查记录"],
-      "references": ["视觉与品牌基础.md", "AI生成设计缺陷清单.md"],
-      "sources": ["nextlevelbuilder/ui-ux-pro-max-skill (MIT)", "anthropics/skills:frontend-design (官方)"]
+      "pipeline": [
+        "第0阶段·现状确认（品牌/参考/竞品）",
+        "视觉目标与情绪板",
+        "色彩与字体系统",
+        "构图与网格",
+        "图形与质感",
+        "多方案对比",
+        "定稿与规范",
+        "交付与走查"
+      ],
+      "artifacts": [
+        "情绪板",
+        "视觉方向提案",
+        "色彩与字体规范",
+        "视觉规范",
+        "走查记录"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "AI生成设计缺陷清单.md"
+      ]
     },
     {
-      "key": "web-design", "name": "网页设计师", "en": "Web Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["网页设计", "官网设计", "落地页设计", "Landing Page"],
+      "key": "web-design",
+      "name": "网页设计师",
+      "en": "Web Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "网页设计",
+        "官网设计",
+        "落地页设计",
+        "Landing Page"
+      ],
       "summary": "负责网站与落地页的结构、转化路径与响应式呈现。",
-      "pipeline": ["第0阶段·现状确认（品牌/现有站点/转化目标）", "页面目标与受众", "信息层级与首屏", "区块结构与文案位", "响应式与断点", "视觉稿", "交付前检查", "验收"],
-      "artifacts": ["页面结构表", "首屏方案", "响应式规格", "交付前检查表"],
-      "references": ["数字产品质量基线.md", "可访问性细则.md", "视觉与品牌基础.md"],
-      "sources": ["nextlevelbuilder/ui-ux-pro-max-skill (MIT)", "anthropics/skills:frontend-design (官方)"]
+      "pipeline": [
+        "第0阶段·现状确认（品牌/现有站点/转化目标）",
+        "页面目标与受众",
+        "信息层级与首屏",
+        "区块结构与文案位",
+        "响应式与断点",
+        "视觉稿",
+        "交付前检查",
+        "验收"
+      ],
+      "artifacts": [
+        "页面结构表",
+        "首屏方案",
+        "响应式规格",
+        "交付前检查表"
+      ],
+      "references": [
+        "数字产品质量基线.md",
+        "可访问性细则.md",
+        "视觉与品牌基础.md"
+      ]
     },
     {
-      "key": "motion-design", "name": "动效设计师", "en": "Motion Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["动效设计", "微交互", "转场动画", "动画节奏"],
+      "key": "motion-design",
+      "name": "动效设计师",
+      "en": "Motion Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "动效设计",
+        "微交互",
+        "转场动画",
+        "动画节奏"
+      ],
       "summary": "定义运动语言：时长、缓动、编排与减弱动效的降级方案。",
-      "pipeline": ["第0阶段·现状确认（平台/现有动效规范）", "动效目标", "运动词汇与缓动", "时长与编排表", "关键转场分镜", "减弱动效降级", "交付规格", "走查"],
-      "artifacts": ["动效词汇表", "时长与缓动表", "转场分镜", "降级方案"],
-      "references": ["数字产品质量基线.md", "可访问性细则.md"],
-      "sources": ["full-stack-skills/design-skills (Apache-2.0)", "jakubkrehel/skills (MIT)"]
+      "pipeline": [
+        "第0阶段·现状确认（平台/现有动效规范）",
+        "动效目标",
+        "运动词汇与缓动",
+        "时长与编排表",
+        "关键转场分镜",
+        "减弱动效降级",
+        "交付规格",
+        "走查"
+      ],
+      "artifacts": [
+        "动效词汇表",
+        "时长与缓动表",
+        "转场分镜",
+        "降级方案"
+      ],
+      "references": [
+        "数字产品质量基线.md",
+        "可访问性细则.md"
+      ]
     },
     {
-      "key": "systems-design", "name": "设计系统设计师", "en": "Design Systems / DesignOps", "domain": "数字产品", "tier": "core",
-      "triggers": ["设计系统", "设计令牌", "组件库规范", "Design Token", "设计规范治理"],
+      "key": "systems-design",
+      "name": "设计系统设计师",
+      "en": "Design Systems / DesignOps",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "设计系统",
+        "设计令牌",
+        "组件库规范",
+        "Design Token",
+        "设计规范治理"
+      ],
       "summary": "把零散决策沉淀为可复用的令牌、组件契约与治理流程。",
-      "pipeline": ["第0阶段·现状确认（现有令牌/组件库/技术栈）", "范围与命名约定", "令牌分层", "组件契约与状态", "文档与示例", "采用与迁移", "治理与版本", "审计"],
-      "artifacts": ["设计令牌", "组件契约", "命名约定", "迁移清单", "治理规则"],
-      "references": ["数字产品质量基线.md", "视觉与品牌基础.md", "可访问性细则.md"],
-      "sources": ["nextlevelbuilder/ui-ux-pro-max-skill (MIT)", "julianoczkowski/designer-skills (Apache-2.0)"]
+      "pipeline": [
+        "第0阶段·现状确认（现有令牌/组件库/技术栈）",
+        "范围与命名约定",
+        "令牌分层",
+        "组件契约与状态",
+        "文档与示例",
+        "采用与迁移",
+        "治理与版本",
+        "审计"
+      ],
+      "artifacts": [
+        "设计令牌",
+        "组件契约",
+        "命名约定",
+        "迁移清单",
+        "治理规则"
+      ],
+      "references": [
+        "数字产品质量基线.md",
+        "视觉与品牌基础.md",
+        "可访问性细则.md"
+      ]
     },
     {
-      "key": "accessibility-design", "name": "可访问性设计师", "en": "Accessibility Designer", "domain": "数字产品", "tier": "core",
-      "triggers": ["可访问性", "无障碍设计", "WCAG", "包容性设计", "对比度检查"],
+      "key": "accessibility-design",
+      "name": "可访问性设计师",
+      "en": "Accessibility Designer",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "可访问性",
+        "无障碍设计",
+        "WCAG",
+        "包容性设计",
+        "对比度检查"
+      ],
       "summary": "按 WCAG 2.2 逐条核验键盘、焦点、对比度、语义与减弱动效。",
-      "pipeline": ["第0阶段·现状确认（目标等级 AA/AAA / 现有审计）", "范围与条款清单", "逐项实测", "缺陷分级", "修复方案", "复验", "出具审计报告"],
-      "artifacts": ["条款清单", "实测记录", "缺陷分级表", "复验报告"],
-      "references": ["可访问性细则.md", "数字产品质量基线.md"],
-      "sources": ["jakubkrehel/skills:better-accessibility (MIT)", "szilu/ux-designer-skill (MIT)"]
+      "pipeline": [
+        "第0阶段·现状确认（目标等级 AA/AAA / 现有审计）",
+        "范围与条款清单",
+        "逐项实测",
+        "缺陷分级",
+        "修复方案",
+        "复验",
+        "出具审计报告"
+      ],
+      "artifacts": [
+        "条款清单",
+        "实测记录",
+        "缺陷分级表",
+        "复验报告"
+      ],
+      "references": [
+        "可访问性细则.md",
+        "数字产品质量基线.md"
+      ]
     },
     {
-      "key": "design-research", "name": "设计研究员", "en": "Design Researcher", "domain": "数字产品", "tier": "core",
-      "triggers": ["用研", "用户研究", "可用性测试", "设计验证", "用户访谈"],
+      "key": "design-research",
+      "name": "设计研究员",
+      "en": "Design Researcher",
+      "domain": "数字产品",
+      "tier": "core",
+      "triggers": [
+        "用研",
+        "用户研究",
+        "可用性测试",
+        "设计验证",
+        "用户访谈"
+      ],
       "summary": "用证据回答设计假设是否成立，输出可追溯的研究结论。",
-      "pipeline": ["第0阶段·现状确认（已有数据/用户群/约束）", "研究问题与假设", "方法与样本", "提纲与脚本", "执行记录", "证据归类", "结论与局限", "设计建议"],
-      "artifacts": ["研究计划", "访谈提纲", "证据台账", "结论与局限", "设计建议"],
-      "references": ["工种通用流水线.md", "许可与来源规范.md"],
-      "sources": ["julianoczkowski/designer-skills:grill-me (Apache-2.0)"]
+      "pipeline": [
+        "第0阶段·现状确认（已有数据/用户群/约束）",
+        "研究问题与假设",
+        "方法与样本",
+        "提纲与脚本",
+        "执行记录",
+        "证据归类",
+        "结论与局限",
+        "设计建议"
+      ],
+      "artifacts": [
+        "研究计划",
+        "访谈提纲",
+        "证据台账",
+        "结论与局限",
+        "设计建议"
+      ],
+      "references": [
+        "工种通用流水线.md",
+        "许可与来源规范.md"
+      ]
     },
     {
-      "key": "graphic-design", "name": "平面设计师", "en": "Graphic Designer", "domain": "平面品牌", "tier": "core",
-      "triggers": ["平面设计", "版式设计", "宣传物料", "KV设计", "海报排版"],
+      "key": "graphic-design",
+      "name": "平面设计师",
+      "en": "Graphic Designer",
+      "domain": "平面品牌",
+      "tier": "core",
+      "triggers": [
+        "平面设计",
+        "版式设计",
+        "宣传物料",
+        "KV设计",
+        "海报排版"
+      ],
       "summary": "在给定媒介与尺寸内完成信息层级、版式与图形表达。",
-      "pipeline": ["第0阶段·现状确认（媒介/尺寸/品牌规范/交付格式）", "传播目标与受众", "信息层级", "版式与网格", "图形与配色", "多方案对比", "印前/导出检查", "交付"],
-      "artifacts": ["创意简报", "版式方案", "导出规格", "交付检查表"],
-      "references": ["视觉与品牌基础.md", "AI生成设计缺陷清单.md"],
-      "sources": ["anthropics/skills:canvas-design (官方)", "inbharatai/claude-skills (待核实)"]
+      "pipeline": [
+        "第0阶段·现状确认（媒介/尺寸/品牌规范/交付格式）",
+        "传播目标与受众",
+        "信息层级",
+        "版式与网格",
+        "图形与配色",
+        "多方案对比",
+        "印前/导出检查",
+        "交付"
+      ],
+      "artifacts": [
+        "创意简报",
+        "版式方案",
+        "导出规格",
+        "交付检查表"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "AI生成设计缺陷清单.md"
+      ]
     },
     {
-      "key": "brand-design", "name": "品牌 / VI 设计师", "en": "Brand Identity Designer", "domain": "平面品牌", "tier": "core",
-      "triggers": ["品牌设计", "VI设计", "视觉识别", "品牌手册", "品牌调性"],
+      "key": "brand-design",
+      "name": "品牌 / VI 设计师",
+      "en": "Brand Identity Designer",
+      "domain": "平面品牌",
+      "tier": "core",
+      "triggers": [
+        "品牌设计",
+        "VI设计",
+        "视觉识别",
+        "品牌手册",
+        "品牌调性"
+      ],
       "summary": "建立并固化品牌的符号、色彩、字体、语气与应用规则。",
-      "pipeline": ["第0阶段·现状确认（现有品牌资产/竞品/受众）", "品牌定位与关键词", "符号与标志方向", "色彩与字体系统", "应用矩阵", "品牌手册", "落地校验", "资产导出"],
-      "artifacts": ["品牌定位", "标志方向", "色彩与字体系统", "应用矩阵", "品牌手册", "资产清单"],
-      "references": ["视觉与品牌基础.md", "AI生成设计缺陷清单.md", "许可与来源规范.md"],
-      "sources": ["anthropics/skills:brand-guidelines (官方)", "full-stack-skills/design-skills:brand-guidelines (Apache-2.0)", "BULDEE/claude-creative-studio (待核实)"]
+      "pipeline": [
+        "第0阶段·现状确认（现有品牌资产/竞品/受众）",
+        "品牌定位与关键词",
+        "符号与标志方向",
+        "色彩与字体系统",
+        "应用矩阵",
+        "品牌手册",
+        "落地校验",
+        "资产导出"
+      ],
+      "artifacts": [
+        "品牌定位",
+        "标志方向",
+        "色彩与字体系统",
+        "应用矩阵",
+        "品牌手册",
+        "资产清单"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "AI生成设计缺陷清单.md",
+        "许可与来源规范.md"
+      ]
     },
     {
-      "key": "packaging-design", "name": "包装设计师", "en": "Packaging Designer", "domain": "平面品牌", "tier": "core",
-      "triggers": ["包装设计", "瓶贴设计", "盒型设计", "包装展开图"],
+      "key": "packaging-design",
+      "name": "包装设计师",
+      "en": "Packaging Designer",
+      "domain": "平面品牌",
+      "tier": "core",
+      "triggers": [
+        "包装设计",
+        "瓶贴设计",
+        "盒型设计",
+        "包装展开图"
+      ],
       "summary": "在结构、法规信息与货架识别之间取得平衡，输出可印制的展开图规格。",
-      "pipeline": ["第0阶段·现状确认（产品/材质/工艺/法规信息）", "货架与竞品扫描", "结构与刀版", "信息层级与法规位", "视觉方案", "工艺与材质标注", "打样检查清单", "交付"],
-      "artifacts": ["结构说明", "展开图规格", "法规信息位", "工艺标注", "打样检查清单"],
-      "references": ["视觉与品牌基础.md", "立体与空间交付边界.md"],
-      "sources": ["anthropics/skills:canvas-design (官方)"]
+      "pipeline": [
+        "第0阶段·现状确认（产品/材质/工艺/法规信息）",
+        "货架与竞品扫描",
+        "结构与刀版",
+        "信息层级与法规位",
+        "视觉方案",
+        "工艺与材质标注",
+        "打样检查清单",
+        "交付"
+      ],
+      "artifacts": [
+        "结构说明",
+        "展开图规格",
+        "法规信息位",
+        "工艺标注",
+        "打样检查清单"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "立体与空间交付边界.md"
+      ]
     },
     {
-      "key": "typography-design", "name": "字体与排版设计师", "en": "Typography Designer", "domain": "平面品牌", "tier": "core",
-      "triggers": ["字体设计", "排版系统", "字阶", "字体搭配", "中文字体"],
+      "key": "typography-design",
+      "name": "字体与排版设计师",
+      "en": "Typography Designer",
+      "domain": "平面品牌",
+      "tier": "core",
+      "triggers": [
+        "字体设计",
+        "排版系统",
+        "字阶",
+        "字体搭配",
+        "中文字体"
+      ],
       "summary": "建立字阶、行高、字距与中西文混排规则，保证可读性与层级。",
-      "pipeline": ["第0阶段·现状确认（语言/媒介/现有字体授权）", "排版目标", "字阶与模数", "字体搭配与授权核验", "行高/字距/断行", "中西文混排", "响应式降级", "排版规范"],
-      "artifacts": ["字阶表", "字体搭配与授权记录", "混排规则", "排版规范"],
-      "references": ["视觉与品牌基础.md", "许可与来源规范.md", "数字产品质量基线.md"],
-      "sources": ["jakubkrehel/skills:better-typography (MIT)", "nextlevelbuilder/ui-ux-pro-max-skill (MIT)"]
+      "pipeline": [
+        "第0阶段·现状确认（语言/媒介/现有字体授权）",
+        "排版目标",
+        "字阶与模数",
+        "字体搭配与授权核验",
+        "行高/字距/断行",
+        "中西文混排",
+        "响应式降级",
+        "排版规范"
+      ],
+      "artifacts": [
+        "字阶表",
+        "字体搭配与授权记录",
+        "混排规则",
+        "排版规范"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "许可与来源规范.md",
+        "数字产品质量基线.md"
+      ]
     },
     {
-      "key": "illustration-design", "name": "商业插画师", "en": "Illustrator", "domain": "平面品牌", "tier": "core",
-      "triggers": ["插画设计", "商业插画", "角色插画", "场景插画"],
+      "key": "illustration-design",
+      "name": "商业插画师",
+      "en": "Illustrator",
+      "domain": "平面品牌",
+      "tier": "core",
+      "triggers": [
+        "插画设计",
+        "商业插画",
+        "角色插画",
+        "场景插画"
+      ],
       "summary": "按叙事目标产出风格一致、可跨媒介复用的插画资产。",
-      "pipeline": ["第0阶段·现状确认（用途/尺寸/品牌调性/授权）", "叙事目标", "风格与参考", "构图与草图", "色彩与质感", "资产拆分与导出", "一致性检查", "交付"],
-      "artifacts": ["风格板", "草图", "成稿清单", "导出规格", "授权记录"],
-      "references": ["视觉与品牌基础.md", "AI生成设计缺陷清单.md", "许可与来源规范.md"],
-      "sources": ["anthropics/skills:algorithmic-art (官方)", "inbharatai/claude-skills (待核实)"]
+      "pipeline": [
+        "第0阶段·现状确认（用途/尺寸/品牌调性/授权）",
+        "叙事目标",
+        "风格与参考",
+        "构图与草图",
+        "色彩与质感",
+        "资产拆分与导出",
+        "一致性检查",
+        "交付"
+      ],
+      "artifacts": [
+        "风格板",
+        "草图",
+        "成稿清单",
+        "导出规格",
+        "授权记录"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "AI生成设计缺陷清单.md",
+        "许可与来源规范.md"
+      ]
     },
     {
-      "key": "infographic-design", "name": "信息图 / 数据可视化设计师", "en": "Information Designer", "domain": "平面品牌", "tier": "core",
-      "triggers": ["信息图", "数据可视化", "图表设计", "可视化叙事"],
+      "key": "infographic-design",
+      "name": "信息图 / 数据可视化设计师",
+      "en": "Information Designer",
+      "domain": "平面品牌",
+      "tier": "core",
+      "triggers": [
+        "信息图",
+        "数据可视化",
+        "图表设计",
+        "可视化叙事"
+      ],
       "summary": "把数据与关系转译成准确、无误导的图形表达。",
-      "pipeline": ["第0阶段·现状确认（数据来源/口径/受众）", "叙事主张", "数据结构与图表选型", "图形语法与配色", "标注与来源", "误导风险检查", "多尺寸适配", "交付"],
-      "artifacts": ["数据口径表", "图表选型", "图形规范", "来源标注", "误导风险检查"],
-      "references": ["视觉与品牌基础.md", "许可与来源规范.md"],
-      "sources": ["inbharatai/claude-skills:infographic-builder / chart-designer (待核实)"]
+      "pipeline": [
+        "第0阶段·现状确认（数据来源/口径/受众）",
+        "叙事主张",
+        "数据结构与图表选型",
+        "图形语法与配色",
+        "标注与来源",
+        "误导风险检查",
+        "多尺寸适配",
+        "交付"
+      ],
+      "artifacts": [
+        "数据口径表",
+        "图表选型",
+        "图形规范",
+        "来源标注",
+        "误导风险检查"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "许可与来源规范.md"
+      ]
     },
     {
-      "key": "ai-generated-design", "name": "AI 生成设计师", "en": "Generative Design Designer", "domain": "平面品牌", "tier": "core",
-      "triggers": ["AI生成设计", "生成式设计", "出图提示词", "视觉提示词", "AI生图"],
+      "key": "ai-generated-design",
+      "name": "AI 生成设计师",
+      "en": "Generative Design Designer",
+      "domain": "平面品牌",
+      "tier": "core",
+      "triggers": [
+        "AI生成设计",
+        "生成式设计",
+        "出图提示词",
+        "视觉提示词",
+        "AI生图"
+      ],
       "summary": "把视觉意图转写成可复现的生成提示词，并逐项排查 AI 生成缺陷。",
-      "pipeline": ["第0阶段·现状确认（宿主生成能力/参考图/用途）", "视觉意图与约束", "提示词结构拆分", "生成与多方案", "缺陷清单逐项排查", "局部重绘与收敛", "授权与来源标注", "交付"],
-      "artifacts": ["视觉意图卡", "提示词版本", "缺陷排查表", "来源与授权记录"],
-      "references": ["AI生成设计缺陷清单.md", "许可与来源规范.md", "视觉与品牌基础.md"],
-      "sources": ["anthropics/skills:canvas-design (官方)"]
+      "pipeline": [
+        "第0阶段·现状确认（宿主生成能力/参考图/用途）",
+        "视觉意图与约束",
+        "提示词结构拆分",
+        "生成与多方案",
+        "缺陷清单逐项排查",
+        "局部重绘与收敛",
+        "授权与来源标注",
+        "交付"
+      ],
+      "artifacts": [
+        "视觉意图卡",
+        "提示词版本",
+        "缺陷排查表",
+        "来源与授权记录"
+      ],
+      "references": [
+        "AI生成设计缺陷清单.md",
+        "许可与来源规范.md",
+        "视觉与品牌基础.md"
+      ]
     },
     {
-      "key": "logo-design", "name": "标志 / Logo 设计师", "en": "Logo Designer", "domain": "平面品牌", "tier": "extended",
-      "triggers": ["Logo设计", "标志设计", "商标图形", "favicon设计"],
-      "summary": "符号提炼、多场景可识别性与变体导出。",
-      "sources": ["neonwatty/logo-designer-skill (待核实)", "inbharatai/claude-skills:logo-designer (待核实)"]
+      "key": "logo-design",
+      "name": "标志 / Logo 设计师",
+      "en": "Logo Designer",
+      "domain": "平面品牌",
+      "tier": "extended",
+      "triggers": [
+        "Logo设计",
+        "标志设计",
+        "商标图形",
+        "favicon设计"
+      ],
+      "summary": "符号提炼、多场景可识别性与变体导出。"
     },
     {
-      "key": "print-design", "name": "印刷与印前设计师", "en": "Print / Prepress Designer", "domain": "平面品牌", "tier": "extended",
-      "triggers": ["印前", "印刷工艺", "出血位", "CMYK", "专色"],
-      "summary": "色彩模式、出血、刀版、纸张与工艺落地。",
-      "sources": ["anthropics/skills:canvas-design (官方)"]
+      "key": "print-design",
+      "name": "印刷与印前设计师",
+      "en": "Print / Prepress Designer",
+      "domain": "平面品牌",
+      "tier": "extended",
+      "triggers": [
+        "印前",
+        "印刷工艺",
+        "出血位",
+        "CMYK",
+        "专色"
+      ],
+      "summary": "色彩模式、出血、刀版、纸张与工艺落地。"
     },
     {
-      "key": "editorial-design", "name": "书籍装帧与版式设计师", "en": "Editorial Designer", "domain": "平面品牌", "tier": "extended",
-      "triggers": ["书籍装帧", "书刊版式", "杂志排版", "栅格版式"],
-      "summary": "长文本栅格、页码体系与阅读节奏。",
-      "sources": ["anthropics/skills:canvas-design (官方)"]
+      "key": "editorial-design",
+      "name": "书籍装帧与版式设计师",
+      "en": "Editorial Designer",
+      "domain": "平面品牌",
+      "tier": "extended",
+      "triggers": [
+        "书籍装帧",
+        "书刊版式",
+        "杂志排版",
+        "栅格版式"
+      ],
+      "summary": "长文本栅格、页码体系与阅读节奏。"
     },
     {
-      "key": "poster-design", "name": "海报 / 广告设计师", "en": "Poster & Ad Designer", "domain": "平面品牌", "tier": "extended",
-      "triggers": ["海报设计", "广告物料", "主视觉KV", "banner设计"],
-      "summary": "远距离识别、单一主张与多尺寸延展。",
-      "sources": ["anthropics/skills:canvas-design (官方)", "inbharatai/claude-skills (待核实)"]
+      "key": "poster-design",
+      "name": "海报 / 广告设计师",
+      "en": "Poster & Ad Designer",
+      "domain": "平面品牌",
+      "tier": "extended",
+      "triggers": [
+        "海报设计",
+        "广告物料",
+        "主视觉KV",
+        "banner设计"
+      ],
+      "summary": "远距离识别、单一主张与多尺寸延展。"
     },
     {
-      "key": "icon-design", "name": "图标设计师", "en": "Icon Designer", "domain": "平面品牌", "tier": "extended",
-      "triggers": ["图标设计", "icon规范", "线性图标", "图标集"],
-      "summary": "网格、光学对齐、像素对齐与多尺寸一致性。",
-      "sources": ["jakubkrehel/skills:better-ui (MIT)", "inbharatai/claude-skills:icon-generator (待核实)"]
+      "key": "icon-design",
+      "name": "图标设计师",
+      "en": "Icon Designer",
+      "domain": "平面品牌",
+      "tier": "extended",
+      "triggers": [
+        "图标设计",
+        "icon规范",
+        "线性图标",
+        "图标集"
+      ],
+      "summary": "网格、光学对齐、像素对齐与多尺寸一致性。"
     },
     {
-      "key": "3d-design", "name": "3D 建模与渲染设计师", "en": "3D Artist", "domain": "空间与实体", "tier": "core",
-      "triggers": ["3D设计", "三维建模", "渲染设计", "产品渲染", "材质灯光"],
+      "key": "3d-design",
+      "name": "3D 建模与渲染设计师",
+      "en": "3D Artist",
+      "domain": "空间与实体",
+      "tier": "core",
+      "triggers": [
+        "3D设计",
+        "三维建模",
+        "渲染设计",
+        "产品渲染",
+        "材质灯光"
+      ],
       "summary": "建模、材质、灯光与镜头的可复现配置，输出渲染规格而非假想成片。",
-      "pipeline": ["第0阶段·现状确认（软件/模型资产/用途/算力）", "镜头与构图", "模型与拓扑", "材质与贴图", "灯光与色彩管理", "渲染参数与版本", "后期与导出", "交付"],
-      "artifacts": ["镜头脚本", "材质与灯光配置", "渲染参数表", "资产清单"],
-      "references": ["立体与空间交付边界.md", "AI生成设计缺陷清单.md"],
-      "sources": ["full-stack-skills/design-skills (Apache-2.0)", "BULDEE/claude-creative-studio (待核实)"]
+      "pipeline": [
+        "第0阶段·现状确认（软件/模型资产/用途/算力）",
+        "镜头与构图",
+        "模型与拓扑",
+        "材质与贴图",
+        "灯光与色彩管理",
+        "渲染参数与版本",
+        "后期与导出",
+        "交付"
+      ],
+      "artifacts": [
+        "镜头脚本",
+        "材质与灯光配置",
+        "渲染参数表",
+        "资产清单"
+      ],
+      "references": [
+        "立体与空间交付边界.md",
+        "AI生成设计缺陷清单.md"
+      ]
     },
     {
-      "key": "interior-design", "name": "室内设计师", "en": "Interior Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["室内设计", "空间布局", "软装搭配", "工装设计"],
-      "summary": "平面布置、动线、材料与施工图交接（线下交付为主）。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "interior-design",
+      "name": "室内设计师",
+      "en": "Interior Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "室内设计",
+        "空间布局",
+        "软装搭配",
+        "工装设计"
+      ],
+      "summary": "平面布置、动线、材料与施工图交接（线下交付为主）。"
     },
     {
-      "key": "architecture-design", "name": "建筑与景观设计师", "en": "Architect / Landscape Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["建筑设计", "景观设计", "总平设计", "立面设计"],
-      "summary": "场地、体量、规范与多专业协同（需资质与 CAD/BIM）。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "architecture-design",
+      "name": "建筑与景观设计师",
+      "en": "Architect / Landscape Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "建筑设计",
+        "景观设计",
+        "总平设计",
+        "立面设计"
+      ],
+      "summary": "场地、体量、规范与多专业协同（需资质与 CAD/BIM）。"
     },
     {
-      "key": "industrial-design", "name": "工业 / 产品造型设计师", "en": "Industrial Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["工业设计", "产品造型", "外观设计", "CMF设计"],
-      "summary": "形态、人机、材料工艺与模具约束。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "industrial-design",
+      "name": "工业 / 产品造型设计师",
+      "en": "Industrial Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "工业设计",
+        "产品造型",
+        "外观设计",
+        "CMF设计"
+      ],
+      "summary": "形态、人机、材料工艺与模具约束。"
     },
     {
-      "key": "fashion-design", "name": "服装与纺织设计师", "en": "Fashion Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["服装设计", "面料设计", "款式设计", "印花图案"],
-      "summary": "款式、版型、面料与季节性企划。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "fashion-design",
+      "name": "服装与纺织设计师",
+      "en": "Fashion Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "服装设计",
+        "面料设计",
+        "款式设计",
+        "印花图案"
+      ],
+      "summary": "款式、版型、面料与季节性企划。"
     },
     {
-      "key": "exhibition-design", "name": "展览展示设计师", "en": "Exhibition Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["展台设计", "展览设计", "舞美设计", "导览动线"],
-      "summary": "展陈叙事、动线、灯光与搭建约束。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "exhibition-design",
+      "name": "展览展示设计师",
+      "en": "Exhibition Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "展台设计",
+        "展览设计",
+        "舞美设计",
+        "导览动线"
+      ],
+      "summary": "展陈叙事、动线、灯光与搭建约束。"
     },
     {
-      "key": "film-art-direction", "name": "影视美术指导", "en": "Production Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["美术指导", "分镜美术", "场景美术", "影视置景"],
-      "summary": "场景、道具、色彩脚本与镜头连续性。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "film-art-direction",
+      "name": "影视美术指导",
+      "en": "Production Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "美术指导",
+        "分镜美术",
+        "场景美术",
+        "影视置景"
+      ],
+      "summary": "场景、道具、色彩脚本与镜头连续性。"
     },
     {
-      "key": "furniture-design", "name": "家具设计师", "en": "Furniture Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["家具设计", "家居产品", "结构设计"],
-      "summary": "尺度、结构、材料与生产工艺。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "furniture-design",
+      "name": "家具设计师",
+      "en": "Furniture Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "家具设计",
+        "家居产品",
+        "结构设计"
+      ],
+      "summary": "尺度、结构、材料与生产工艺。"
     },
     {
-      "key": "jewelry-design", "name": "珠宝与配饰设计师", "en": "Jewelry Designer", "domain": "空间与实体", "tier": "extended",
-      "triggers": ["珠宝设计", "首饰设计", "配饰设计"],
-      "summary": "贵金属工艺、镶嵌结构与佩戴尺度。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "jewelry-design",
+      "name": "珠宝与配饰设计师",
+      "en": "Jewelry Designer",
+      "domain": "空间与实体",
+      "tier": "extended",
+      "triggers": [
+        "珠宝设计",
+        "首饰设计",
+        "配饰设计"
+      ],
+      "summary": "贵金属工艺、镶嵌结构与佩戴尺度。"
     },
     {
-      "key": "game-ui-design", "name": "游戏界面美术", "en": "Game UI Artist", "domain": "数字产品", "tier": "extended",
-      "triggers": ["游戏UI", "HUD设计", "游戏界面", "战斗界面"],
-      "summary": "HUD、背包、战斗反馈与多分辨率适配。",
-      "sources": ["full-stack-skills/design-skills (Apache-2.0)"]
+      "key": "game-ui-design",
+      "name": "游戏界面美术",
+      "en": "Game UI Artist",
+      "domain": "数字产品",
+      "tier": "extended",
+      "triggers": [
+        "游戏UI",
+        "HUD设计",
+        "游戏界面",
+        "战斗界面"
+      ],
+      "summary": "HUD、背包、战斗反馈与多分辨率适配。"
     },
     {
-      "key": "prototype-design", "name": "原型与线框设计师", "en": "Prototyper", "domain": "数字产品", "tier": "extended",
-      "triggers": ["线框图", "原型图", "低保真", "交互原型"],
-      "summary": "低保真结构表达与可点击验证。",
-      "sources": ["julianoczkowski/designer-skills (Apache-2.0)", "inbharatai/claude-skills:wireframe-builder (待核实)"]
+      "key": "prototype-design",
+      "name": "原型与线框设计师",
+      "en": "Prototyper",
+      "domain": "数字产品",
+      "tier": "extended",
+      "triggers": [
+        "线框图",
+        "原型图",
+        "低保真",
+        "交互原型"
+      ],
+      "summary": "低保真结构表达与可点击验证。"
     },
     {
-      "key": "ecommerce-design", "name": "电商视觉设计师", "en": "E-commerce Visual Designer", "domain": "商业与新兴", "tier": "core",
-      "triggers": ["电商视觉", "详情页设计", "主图设计", "店铺装修", "活动页设计"],
+      "key": "ecommerce-design",
+      "name": "电商视觉设计师",
+      "en": "E-commerce Visual Designer",
+      "domain": "商业与新兴",
+      "tier": "core",
+      "triggers": [
+        "电商视觉",
+        "详情页设计",
+        "主图设计",
+        "店铺装修",
+        "活动页设计"
+      ],
       "summary": "在转化目标下组织主图、详情页与活动页的信息密度与节奏。",
-      "pipeline": ["第0阶段·现状确认（平台规则/商品卖点/现有素材）", "转化目标与卖点排序", "主图与信息层级", "详情页节奏", "活动页与多尺寸", "合规与禁用词检查", "切片与导出", "交付"],
-      "artifacts": ["卖点排序表", "主图方案", "详情页结构", "合规检查表", "导出规格"],
-      "references": ["视觉与品牌基础.md", "AI生成设计缺陷清单.md", "许可与来源规范.md"],
-      "sources": ["inbharatai/claude-skills (待核实)", "anthropics/skills:canvas-design (官方)"]
+      "pipeline": [
+        "第0阶段·现状确认（平台规则/商品卖点/现有素材）",
+        "转化目标与卖点排序",
+        "主图与信息层级",
+        "详情页节奏",
+        "活动页与多尺寸",
+        "合规与禁用词检查",
+        "切片与导出",
+        "交付"
+      ],
+      "artifacts": [
+        "卖点排序表",
+        "主图方案",
+        "详情页结构",
+        "合规检查表",
+        "导出规格"
+      ],
+      "references": [
+        "视觉与品牌基础.md",
+        "AI生成设计缺陷清单.md",
+        "许可与来源规范.md"
+      ]
     },
     {
-      "key": "service-design", "name": "服务设计师", "en": "Service Designer", "domain": "商业与新兴", "tier": "extended",
-      "triggers": ["服务设计", "服务蓝图", "触点设计", "前后台流程"],
-      "summary": "跨触点的前后台流程与服务蓝图。",
-      "sources": ["julianoczkowski/designer-skills (Apache-2.0)"]
+      "key": "service-design",
+      "name": "服务设计师",
+      "en": "Service Designer",
+      "domain": "商业与新兴",
+      "tier": "extended",
+      "triggers": [
+        "服务设计",
+        "服务蓝图",
+        "触点设计",
+        "前后台流程"
+      ],
+      "summary": "跨触点的前后台流程与服务蓝图。"
     },
     {
-      "key": "design-ops", "name": "设计运营 / 设计管理者", "en": "Design Ops", "domain": "商业与新兴", "tier": "extended",
-      "triggers": ["设计管理", "设计流程规范", "设计协作", "设计资产治理"],
-      "summary": "流程、协作、资产治理与质量度量。",
-      "sources": ["julianoczkowski/designer-skills (Apache-2.0)"]
+      "key": "design-ops",
+      "name": "设计运营 / 设计管理者",
+      "en": "Design Ops",
+      "domain": "商业与新兴",
+      "tier": "extended",
+      "triggers": [
+        "设计管理",
+        "设计流程规范",
+        "设计协作",
+        "设计资产治理"
+      ],
+      "summary": "流程、协作、资产治理与质量度量。"
     },
     {
-      "key": "environmental-graphic", "name": "导视与空间图形设计师", "en": "Environmental Graphic Designer", "domain": "商业与新兴", "tier": "extended",
-      "triggers": ["导视设计", "标识系统", "空间图形", "signage"],
-      "summary": "寻路逻辑、字高视距与标识系统。",
-      "sources": ["无（线下学科，仅方法论）"]
+      "key": "environmental-graphic",
+      "name": "导视与空间图形设计师",
+      "en": "Environmental Graphic Designer",
+      "domain": "商业与新兴",
+      "tier": "extended",
+      "triggers": [
+        "导视设计",
+        "标识系统",
+        "空间图形",
+        "signage"
+      ],
+      "summary": "寻路逻辑、字高视距与标识系统。"
     }
   ]
 }

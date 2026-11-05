@@ -94,7 +94,5 @@ description: AI 生成设计师：把视觉意图转写成可复现的生成提�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- anthropics/skills:canvas-design (官方)
 >
 > 工种 key：`ai-generated-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

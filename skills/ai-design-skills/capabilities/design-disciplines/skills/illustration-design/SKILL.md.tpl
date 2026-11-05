@@ -95,8 +95,5 @@ description: 商业插画师：按叙事目标产出风格一致、可跨媒介�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- anthropics/skills:algorithmic-art (官方)
-- inbharatai/claude-skills (待核实)
 >
 > 工种 key：`illustration-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

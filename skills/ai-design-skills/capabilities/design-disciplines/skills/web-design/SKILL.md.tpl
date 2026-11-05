@@ -94,8 +94,5 @@ description: 网页设计师：负责网站与落地页的结构、转化路径�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- nextlevelbuilder/ui-ux-pro-max-skill (MIT)
-- anthropics/skills:frontend-design (官方)
 >
 > 工种 key：`web-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

@@ -95,8 +95,5 @@ description: 电商视觉设计师：在转化目标下组织主图、详情页�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- inbharatai/claude-skills (待核实)
-- anthropics/skills:canvas-design (官方)
 >
 > 工种 key：`ecommerce-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

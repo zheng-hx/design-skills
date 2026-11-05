@@ -93,8 +93,5 @@ description: 交互设计师：负责行为层：状态机、反馈、动效触�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- jakubkrehel/skills (MIT)
-- full-stack-skills/design-skills (Apache-2.0)
 >
 > 工种 key：`interaction-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

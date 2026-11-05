@@ -94,8 +94,5 @@ description: 视觉设计师：定调视觉语言：构图、色彩、字体、�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- nextlevelbuilder/ui-ux-pro-max-skill (MIT)
-- anthropics/skills:frontend-design (官方)
 >
 > 工种 key：`visual-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

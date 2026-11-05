@@ -94,8 +94,5 @@ description: UX 体验设计师：负责端到端体验：任务流、信息层�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- julianoczkowski/designer-skills (Apache-2.0)
-- full-stack-skills/design-skills (Apache-2.0)
 >
 > 工种 key：`ux-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

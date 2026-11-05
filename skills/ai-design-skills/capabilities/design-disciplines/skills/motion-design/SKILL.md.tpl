@@ -93,8 +93,5 @@ description: 动效设计师：定义运动语言：时长、缓动、编排与�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- full-stack-skills/design-skills (Apache-2.0)
-- jakubkrehel/skills (MIT)
 >
 > 工种 key：`motion-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

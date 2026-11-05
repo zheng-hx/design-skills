@@ -15,7 +15,7 @@
 | 3 | 分层交付：19 core 独立技能 + 18 extended 索引兜底 + 2 入口 | `check-triggers.py` |
 | 4 | 公共设计引擎：7 份 rules（5 份复用并对齐路径与措辞 + 2 份新增） | `validate-package.py` |
 | 5 | 9 份 references、9 份产物模板、19 份工种技能模板、19 份 openai.yaml | 渲染 dry-run |
-| 6 | GitHub 设计类技能项目调研与按许可分级整合 | [开源资料与致谢](开源资料与致谢.md) |
+| 6 | 设计方法论的自包含整理与按许可分级说明 | [开源资料与致谢](开源资料与致谢.md) |
 | 7 | 渲染脚本：工种过滤 / 逐字保真 / 结构校验 / `artifacts/` 保护 / `--dry-run` | `verify-render.py` |
 | 8 | 单技能入口（生成 / 安装 / 更新合一） | 包结构校验 |
 | 9 | **多 AI 工具扫描全装**，未检测目录不写；清单按技能记录真实 mode | `check-install-reconcile.py` 30 项断言 |

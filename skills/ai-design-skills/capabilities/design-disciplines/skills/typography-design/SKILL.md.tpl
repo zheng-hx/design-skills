@@ -94,8 +94,5 @@ description: 字体与排版设计师：建立字阶、行高、字距与中西�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- jakubkrehel/skills:better-typography (MIT)
-- nextlevelbuilder/ui-ux-pro-max-skill (MIT)
 >
 > 工种 key：`typography-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

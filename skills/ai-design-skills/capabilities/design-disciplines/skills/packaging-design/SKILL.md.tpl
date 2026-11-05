@@ -94,7 +94,5 @@ description: 包装设计师：在结构、法规信息与货架识别之间取�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- anthropics/skills:canvas-design (官方)
 >
 > 工种 key：`packaging-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

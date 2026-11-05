@@ -97,7 +97,5 @@ description: 产品设计师：贯通问题定义到交付的全流程设计，�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- julianoczkowski/designer-skills (Apache-2.0)
 >
 > 工种 key：`product-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

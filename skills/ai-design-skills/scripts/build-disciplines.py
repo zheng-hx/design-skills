@@ -53,7 +53,7 @@ def validate(data) -> list[str]:
         if d["domain"] not in data["domains"]:
             errs.append(f"{d['key']}: domain 未登记 {d['domain']}")
         if d["tier"] == "core":
-            for f in ("summary", "pipeline", "artifacts", "references", "sources", "triggers"):
+            for f in ("summary", "pipeline", "artifacts", "references", "triggers"):
                 if not d.get(f):
                     errs.append(f"{d['key']}: core 缺字段 {f}")
             for r in d["references"]:
@@ -78,7 +78,6 @@ def skill_md(d, data) -> str:
         f"| 涉及「{r[:-3]}」时 | `{{{{DESIGN_ROOT}}}}/references/{r}` |"
         for r in d["references"]
     )
-    sources = "\n".join(f"- {s}" for s in d["sources"])
 
     return f"""---
 name: {d['key']}
@@ -164,8 +163,6 @@ description: {d['name']}：{d['summary']} 当用户说「{triggers}」时使用�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-{sources}
 >
 > 工种 key：`{d['key']}`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。
 """
@@ -229,34 +226,24 @@ def discipline_index(data) -> str:
 
 
 def source_index(data) -> str:
-    repos = collections.defaultdict(list)
-    for x in data["disciplines"]:
-        for s in x["sources"]:
-            repos[s].append(x["name"])
-    lines = [
+    # 本包默认不引用任何外部开源项目，所有规则、结构、检查表均来自本包自身沉淀，
+    # 以保证交付物完全自包含、可离线运行、不串外部许可。生成物也随之只输出自包含说明。
+    return "\n".join([
         "# 开源资料索引",
         "",
-        "> 由 `build-disciplines.py` 从 `disciplines.json` 的 `sources` 聚合生成，请勿手改。",
-        "> **许可红线**：MIT / Apache-2.0 可借鉴具体表达与结构；标注「待核实」或无 LICENSE 的"
-        "只借鉴方法论，不搬文字与模板。详情见 `许可与来源规范.md`。",
+        "> 由 `build-disciplines.py` 生成，请勿手改。",
         "",
-        "| 项目 / 许可 | 借鉴它的工种 |",
-        "|---|---|",
-    ]
-    for repo in sorted(repos):
-        names = "、".join(sorted(set(repos[repo])))
-        lines.append(f"| {repo} | {names} |")
-    lines += [
+        "本技能包**默认不引用任何外部开源项目**，所有规则、结构、检查表均来自本包自身沉淀，"
+        "以保证交付物完全自包含、可离线运行、不串外部许可。",
         "",
-        "## 接入规则",
+        "## 自包含说明",
         "",
-        "1. 新增参考资料必须登记进 `disciplines.json` 的 `shared_references`，否则渲染校验判为死文件。",
-        "2. 只搬「可检索的规则 / 结构 / 检查表」，不整包塞进技能目录——工种包是自包含的，"
-        "整包塞会串引用、破校验。",
-        "3. 外部规则与本包门禁冲突时，以 `{{DESIGN_ROOT}}/rules/设计通用规范.md` 为准。",
+        "- 工种流水线、门禁红线、产物规范一律以内置 `{{DESIGN_ROOT}}/rules/` 与 `references/` 为准；",
+        "- 若未来确有需要借鉴外部资料，须先登记进 `disciplines.json` 的 `sources`，"
+        "并核对 `许可与来源规范.md` 的许可边界，且只借鉴方法、不整包塞入；",
+        "- 外部规则与本包门禁冲突时，以 `{{DESIGN_ROOT}}/rules/设计通用规范.md` 为准。",
         "",
-    ]
-    return "\n".join(lines)
+    ])
 
 
 def build(data, check: bool) -> int:

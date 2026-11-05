@@ -95,8 +95,5 @@ description: UI 设计师：负责界面的视觉层：组件、状态、密度�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- nextlevelbuilder/ui-ux-pro-max-skill (MIT)
-- jakubkrehel/skills (MIT)
 >
 > 工种 key：`ui-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

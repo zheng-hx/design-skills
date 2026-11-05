@@ -96,9 +96,5 @@ description: 品牌 / VI 设计师：建立并固化品牌的符号、色彩、�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- anthropics/skills:brand-guidelines (官方)
-- full-stack-skills/design-skills:brand-guidelines (Apache-2.0)
-- BULDEE/claude-creative-studio (待核实)
 >
 > 工种 key：`brand-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

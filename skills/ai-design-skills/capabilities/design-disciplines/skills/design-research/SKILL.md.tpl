@@ -94,7 +94,5 @@ description: 设计研究员：用证据回答设计假设是否成立，输出�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- julianoczkowski/designer-skills:grill-me (Apache-2.0)
 >
 > 工种 key：`design-research`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。

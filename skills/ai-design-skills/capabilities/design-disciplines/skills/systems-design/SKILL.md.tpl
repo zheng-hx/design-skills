@@ -95,8 +95,5 @@ description: 设计系统设计师：把零散决策沉淀为可复用的令牌�
 
 ---
 
-> **登记来源**（借鉴方法论与结构，许可边界见 `许可与来源规范.md`）：
-- nextlevelbuilder/ui-ux-pro-max-skill (MIT)
-- julianoczkowski/designer-skills (Apache-2.0)
 >
 > 工种 key：`systems-design`　·　由 `build-disciplines.py` 从 `disciplines.json` 生成，请勿手改。
