@@ -110,13 +110,24 @@ def main() -> int:
     if declared != set(ENTRIES):
         errs.append(f"plugin.json skills 与入口不一致: {sorted(declared)}")
 
-    # 7. 技能目录完整性
+    # 7. 技能目录完整性 + 全工种通用流程（门禁/流水线骨架/最小集/评审清单不分工种）
     core = [d["key"] for d in data["disciplines"] if d["tier"] == "core"]
+    universals = ("交付最小集.md", "评审子智能体清单.md")
     for k in core:
         if not (DISC_SKILLS / k / "SKILL.template.md").is_file():
             errs.append(f"core 工种 {k} 缺 SKILL.template.md")
         if not (DISC_SKILLS / k / "agents" / "openai.template.yaml").is_file():
             errs.append(f"core 工种 {k} 缺 agents/openai.template.yaml")
+
+        d = next(x for x in data["disciplines"] if x["key"] == k)
+        for r in universals:
+            if r not in d.get("references", []):
+                errs.append(f"core 工种 {k} 缺通用参考 {r}（最小集/评审清单不分工种）")
+        pl = d.get("pipeline", [])
+        if not any(("评审" in s) or ("走查" in s) or ("审计" in s) or ("复验" in s) for s in pl):
+            errs.append(f"core 工种 {k} 流水线缺「评审」收口阶段")
+        if not any(("交付" in s) or ("验收" in s) for s in pl):
+            errs.append(f"core 工种 {k} 流水线缺「交付/验收」收口阶段")
 
     # 8. 渲染内容不得残留旧包路径；.design/rules|references 引用必须可达
     #    （抓的是「复用规则时忘了把 .roles/ 改成 .design/」这类路径残留事故）

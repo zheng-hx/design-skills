@@ -47,7 +47,7 @@ description: 可访问性设计师：按 WCAG 2.2 逐条核验键盘、焦点、
 | 4 | **缺陷分级** | 上一阶段产物 `confirmed` | 本阶段结论有来源、无 `[缺失·阻塞]` | `04-` 产物 |
 | 5 | **修复方案** | 上一阶段产物 `confirmed` | 本阶段结论有来源、无 `[缺失·阻塞]` | `05-` 产物 |
 | 6 | **复验** | 上一阶段产物 `confirmed` | 本阶段结论有来源、无 `[缺失·阻塞]` | `06-` 产物 |
-| 7 | **出具审计报告** | 上一阶段产物 `confirmed` | 本阶段结论有来源、无 `[缺失·阻塞]` | `07-` 产物 |
+| 7 | **出具报告与交付** | 上一阶段产物 `confirmed` | 本阶段结论有来源、无 `[缺失·阻塞]` | `07-` 产物 |
 
 - 线性主干：**上一阶段 `confirmed` 才进下一阶段**；门禁不过就退回或请示，不跳步。
 - 收敛时在**对话内**出结论卡片 → 落盘 `.design/artifacts/<feature>/00-summary.md`（`status: analyzing`）→ 请用户确认；**确认后才改 `producing` 进入生产**。
@@ -81,6 +81,8 @@ description: 可访问性设计师：按 WCAG 2.2 逐条核验键盘、焦点、
 |---|---|
 | 涉及「可访问性细则」时 | `{{DESIGN_ROOT}}/references/可访问性细则.md` |
 | 涉及「数字产品质量基线」时 | `{{DESIGN_ROOT}}/references/数字产品质量基线.md` |
+| 涉及「交付最小集」时 | `{{DESIGN_ROOT}}/references/交付最小集.md` |
+| 涉及「评审子智能体清单」时 | `{{DESIGN_ROOT}}/references/评审子智能体清单.md` |
 | 用户提到的工种不在 core 列表 | `{{DESIGN_ROOT}}/references/工种索引.md` |
 | 长尾工种要走通用流水线 | `{{DESIGN_ROOT}}/references/工种通用流水线.md` |
 | 用开源资料前确认许可边界 | `{{DESIGN_ROOT}}/references/许可与来源规范.md` |

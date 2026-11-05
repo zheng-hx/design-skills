@@ -82,6 +82,8 @@ description: 动效设计师：定义运动语言：时长、缓动、编排与�
 |---|---|
 | 涉及「数字产品质量基线」时 | `{{DESIGN_ROOT}}/references/数字产品质量基线.md` |
 | 涉及「可访问性细则」时 | `{{DESIGN_ROOT}}/references/可访问性细则.md` |
+| 涉及「交付最小集」时 | `{{DESIGN_ROOT}}/references/交付最小集.md` |
+| 涉及「评审子智能体清单」时 | `{{DESIGN_ROOT}}/references/评审子智能体清单.md` |
 | 用户提到的工种不在 core 列表 | `{{DESIGN_ROOT}}/references/工种索引.md` |
 | 长尾工种要走通用流水线 | `{{DESIGN_ROOT}}/references/工种通用流水线.md` |
 | 用开源资料前确认许可边界 | `{{DESIGN_ROOT}}/references/许可与来源规范.md` |
