@@ -1,0 +1,35 @@
+# Node
+node_modules/
+npm-debug.log*
+__pycache__/
+*.py[cod]
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 技能渲染产物（本仓库是技能源，渲染只应发生在目标项目里）
+.design/
+.design.bak/
+
+# 目标项目里的 AI 工具目录（注册产物，不入库）
+.claude/skills/
+.codex/skills/
+.agents/skills/
+.cursor/skills/
+.openclaw/skills/
+.codebuddy/skills/
+.qoder/skills/
+.reasonix/skills/
+
+# 评测运行留证
+evals/runs/*
+!evals/runs/.gitkeep
+
+# 环境
+.env
+!.env.example
+
+# IDE
+.idea/
+.vscode/

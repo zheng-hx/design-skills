@@ -1,0 +1,22 @@
+{
+  "name": "ai-design-skills",
+  "version": "1.0.0",
+  "description": "全行业设计师技能包 — 仅公开 apply-design-skills、install-design-skills 与 update-design-skills",
+  "keywords": [
+    "design",
+    "skills",
+    "ui",
+    "ux",
+    "graphic",
+    "brand",
+    "packaging",
+    "illustration",
+    "3d",
+    "motion"
+  ],
+  "skills": [
+    "./skills/apply-design-skills",
+    "./skills/install-design-skills",
+    "./skills/update-design-skills"
+  ]
+}

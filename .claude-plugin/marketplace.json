@@ -1,0 +1,23 @@
+{
+  "name": "ai-design",
+  "owner": {
+    "name": "数盒团队"
+  },
+  "description": "全行业设计师技能包 — 三个公开入口：初始化 / 注册 / 更新",
+  "plugins": [
+    {
+      "name": "ai-design-skills",
+      "source": "./",
+      "description": "按设计工种渲染自包含的 .design 规则、通用引擎与工种技能；注册时扫描项目内所有 AI 工具目录，只向检测到的目录建软链",
+      "category": "design",
+      "keywords": [
+        "design",
+        "skills",
+        "ui",
+        "ux",
+        "graphic-design",
+        "brand"
+      ]
+    }
+  ]
+}

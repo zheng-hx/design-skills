@@ -1,0 +1,5 @@
+interface:
+  display_name: "Update Design Skills"
+  short_description: "三层升级设计师技能：刷新入口包、替换式重渲染 .design/（保留设计稿）、扫描所有 AI 工具目录对账注册。当用户说「更新设计技能/技能没生效，重装一下」时使用。"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,42 @@
+{
+  "name": "ai-design-skills",
+  "version": "1.0.0",
+  "private": true,
+  "author": "zhenghx",
+  "description": "全行业设计师技能包 — 单角色多工种：公共设计引擎 + 4 域 37 个设计工种（分层交付），支持版本升级与多 AI 工具按扫描路径软链安装",
+  "license": "MIT",
+  "files": [
+    ".claude-plugin/",
+    "CHANGELOG.md",
+    "docs/",
+    "evals/",
+    "skills/",
+    "!**/__pycache__/",
+    "!**/*.pyc",
+    "scripts/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "design",
+    "skills",
+    "agent-skills",
+    "ui-design",
+    "graphic-design",
+    "brand-design",
+    "design-system",
+    "design-pipeline"
+  ],
+  "scripts": {
+    "version": "python3 scripts/sync-version.py",
+    "check-version": "python3 scripts/sync-version.py --check",
+    "check": "python3 scripts/validate-package.py",
+    "verify-render": "python3 skills/apply-design-skills/scripts/render-design-package.py --project /tmp/ai-design-verify --disciplines ui-design,graphic-design --dry-run",
+    "check-triggers": "python3 scripts/check-triggers.py",
+    "check-evals": "python3 scripts/check-evals.py",
+    "check-install": "python3 scripts/check-install-reconcile.py",
+    "audit": "python3 scripts/audit-repo.py",
+    "check:all": "npm run check-version && npm run check && npm run check-triggers && npm run check-evals && npm run check-install && npm run verify-render && npm run audit"
+  },
+  "packageManager": "npm@10.9.4"
+}

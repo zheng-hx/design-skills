@@ -1,0 +1,5 @@
+interface:
+  display_name: "Apply Design Skills"
+  short_description: "为项目初始化设计师技能包：确认启用哪些设计工种，渲染公共引擎与工种技能到 .design/。当用户说「初始化设计技能/给项目装设计师/换工种」时使用。"
+policy:
+  allow_implicit_invocation: true

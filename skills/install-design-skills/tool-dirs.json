@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "default_scope": "user",
+  "note": "各 AI 工具真实的技能发现目录。装错目录 = 技能不生效，所以安装前必须先探测。改规则只改本文件，脚本与文档都从这里读。",
+  "workbench": {
+    "user": "~/.design/",
+    "project": ".design/",
+    "note": "全局工作台放用户主目录，共享引擎只存一份；产物仍按当前工作目录落盘，避免跨项目串稿。"
+  },
+  "artifacts": ".design/artifacts/",
+  "sources": [
+    "OpenAI Codex 官方《Build skills》: USER=$HOME/.agents/skills, REPO=.agents/skills (cwd→repo root), ADMIN=/etc/codex/skills",
+    "Claude Code Skills 文档: 个人 ~/.claude/skills/, 项目 .claude/skills/",
+    "Cursor Agent Skills 文档: ~/.cursor/skills/ 与 ~/.agents/skills/，项目 .cursor/skills/",
+    "agentskills.io 开放标准: ~/.agents/skills/ 与 .agents/skills/",
+    "WorkBuddy 内置约定: 用户级技能 ~/.workbuddy/skills/，项目级 {workspace}/.workbuddy/skills/",
+    "本机实测 2026-11-05: ~/.workbuddy/skills(19) ~/.agents/skills(33) ~/.codebuddy/skills(38) ~/.openclaw/skills(7) ~/.claude/skills(3) ~/.codex/skills(0)"
+  ],
+  "tools": [
+    {
+      "key": "workbuddy",
+      "name": "WorkBuddy",
+      "detect_user": ["~/.workbuddy"],
+      "detect_project": [".workbuddy"],
+      "env": ["WORKBUDDY_HOME"],
+      "user_skills": "~/.workbuddy/skills",
+      "project_skills": ".workbuddy/skills",
+      "standard": "WorkBuddy 用户级技能目录",
+      "note": "本包首要目标。旧版工具表完全漏了它，导致全局技能不生效。"
+    },
+    {
+      "key": "codex",
+      "name": "Codex (OpenAI / ChatGPT Desktop)",
+      "detect_user": ["~/.codex", "~/.agents"],
+      "detect_project": [".agents", ".codex"],
+      "env": ["CODEX_HOME"],
+      "user_skills": "~/.agents/skills",
+      "project_skills": ".agents/skills",
+      "standard": "Agent Skills 开放标准",
+      "note": "官方 USER 级是 ~/.agents/skills；~/.codex/skills 只是旧版遗留，不是技能发现目录。旧版脚本把它写成 Codex 目标，是错的。"
+    },
+    {
+      "key": "claude-code",
+      "name": "Claude Code / Cline",
+      "detect_user": ["~/.claude"],
+      "detect_project": [".claude"],
+      "env": ["CLAUDE_CODE"],
+      "user_skills": "~/.claude/skills",
+      "project_skills": ".claude/skills",
+      "standard": "Claude Code Skills",
+      "note": "Cline 兼容 .claude/skills/。同名技能 Claude Code 的优先级是 企业 > 个人 > 项目。"
+    },
+    {
+      "key": "cursor",
+      "name": "Cursor",
+      "detect_user": ["~/.cursor"],
+      "detect_project": [".cursor"],
+      "env": ["CURSOR_HOME"],
+      "user_skills": "~/.cursor/skills",
+      "project_skills": ".cursor/skills",
+      "standard": "Cursor Agent Skills",
+      "note": "Cursor 也读 ~/.agents/skills 与 ~/.claude/skills，但仍写自己的目录以免依赖兼容行为；安装后需重载窗口。"
+    },
+    {
+      "key": "codebuddy",
+      "name": "CodeBuddy",
+      "detect_user": ["~/.codebuddy"],
+      "detect_project": [".codebuddy"],
+      "env": [],
+      "user_skills": "~/.codebuddy/skills",
+      "project_skills": ".codebuddy/skills",
+      "standard": "CodeBuddy 原生 SKILL.md",
+      "note": ""
+    },
+    {
+      "key": "openclaw",
+      "name": "OpenClaw",
+      "detect_user": ["~/.openclaw"],
+      "detect_project": [".openclaw"],
+      "env": ["OPENCLAW"],
+      "user_skills": "~/.openclaw/skills",
+      "project_skills": ".openclaw/skills",
+      "standard": "Agent Skills 开放标准",
+      "note": ""
+    },
+    {
+      "key": "qoder",
+      "name": "Qoder",
+      "detect_user": ["~/.qoder"],
+      "detect_project": [".qoder"],
+      "env": [],
+      "user_skills": "~/.qoder/skills",
+      "project_skills": ".qoder/skills",
+      "standard": "SKILL.md 兼容",
+      "note": "未在本机实测，按同名目录约定登记。"
+    },
+    {
+      "key": "reasonix",
+      "name": "Reasonix",
+      "detect_user": ["~/.reasonix"],
+      "detect_project": [".reasonix"],
+      "env": ["REASONIX"],
+      "user_skills": "~/.reasonix/skills",
+      "project_skills": ".reasonix/skills",
+      "standard": "原生 SKILL.md",
+      "note": "未在本机实测，按同名目录约定登记。"
+    }
+  ],
+  "not_skill_dirs": {
+    "~/.codex/skills": "旧版遗留；Codex 官方 USER 级是 ~/.agents/skills，别往这里装",
+    "~/.workbuddy": "工具根目录，不是技能发现目录；技能必须放 skills/ 子目录",
+    ".agents": "工具标记目录本身，不是技能发现目录"
+  }
+}
