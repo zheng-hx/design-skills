@@ -113,6 +113,8 @@ def main() -> int:
     # 7. 技能目录完整性 + 全工种通用流程（门禁/流水线骨架/最小集/评审清单不分工种）
     core = [d["key"] for d in data["disciplines"] if d["tier"] == "core"]
     universals = ("交付最小集.md", "评审子智能体清单.md")
+    minimal_path = CAPS / "design-disciplines" / "references" / "交付最小集.md"
+    minimal = minimal_path.read_text(encoding="utf-8") if minimal_path.is_file() else ""
     for k in core:
         if not (DISC_SKILLS / k / "SKILL.template.md").is_file():
             errs.append(f"core 工种 {k} 缺 SKILL.template.md")
@@ -128,6 +130,11 @@ def main() -> int:
             errs.append(f"core 工种 {k} 流水线缺「评审」收口阶段")
         if not any(("交付" in s) or ("验收" in s) for s in pl):
             errs.append(f"core 工种 {k} 流水线缺「交付/验收」收口阶段")
+
+        # 每个 core 工种必须在《交付最小集》里有对应行（漏一个就是流程不通用）
+        if k not in minimal and k.replace("-design", "") not in minimal \
+                and k.split("-")[-1] not in minimal:
+            errs.append(f"core 工种 {k} 在《交付最小集》缺对应行")
 
     # 8. 渲染内容不得残留旧包路径；.design/rules|references 引用必须可达
     #    （抓的是「复用规则时忘了把 .roles/ 改成 .design/」这类路径残留事故）
