@@ -1,5 +1,8 @@
 ---
 name: ai-design-skills
+slug: ai-design-skills
+displayName: AI Design Skills（全行业设计师技能包）
+version: 1.0.1
 description: 全行业设计师技能包的唯一入口：初始化（把公共设计引擎与工种技能渲染到用户全局工作台 ~/.design/）、注册到 AI 工具全局目录（按各工具真实目录规则探测、只对检测到的工具建软链）、更新/升级。当用户说「初始化设计技能/安装设计技能/技能没生效/换个工具也要能用/更新设计技能/升级设计技能」时使用。
 ---
 

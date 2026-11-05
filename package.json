@@ -1,6 +1,6 @@
 {
   "name": "ai-design-skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "author": "zhenghx",
   "description": "全行业设计师技能包 — 单角色多工种：公共设计引擎 + 4 域 37 个设计工种（分层交付），支持版本升级与多 AI 工具按扫描路径软链安装",

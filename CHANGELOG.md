@@ -4,6 +4,16 @@
 版本号规则：**一个对外发布版本 = 末位 +1**（1.0.0 → 1.1.0 …）。
 未提交的多批改动合并为一个版本——`/ai-design-skills`（更新步骤）靠版本号判断本地是否过期。
 
+## [1.0.1] - 2026-11-05
+
+### 修复 · SkillHub 发布完整性（GitHub 导入通道丢文件）
+
+- **根因**：SkillHub 从 GitHub 导入只收录识别扩展名的文本文件（.md/.py/.json/.yaml，恰 28 个），
+  全部 54 个 `.tpl` 模板与无扩展名的 `VERSION` 被丢弃——导致安装后无法渲染工作台。
+- `SKILL.md` frontmatter 补 `slug` / `displayName` / `version`（SkillHub CLI 发布要求）；
+  `sync-version.py` 同步范围扩展到 SKILL.md 的 `version`，保持单一事实源。
+- 发布通道改为 `skillhub publish`（CLI zip 打包无扩展名白名单，全量文件入库），版本升 1.0.1。
+
 ## [Unreleased]
 
 ### 变更 · 默认全局安装（设计师技能是人的能力，装一次所有项目可用）

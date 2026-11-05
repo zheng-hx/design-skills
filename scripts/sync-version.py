@@ -3,7 +3,8 @@
 """sync-version.py — 版本号单一事实源同步。
 
 事实源：package.json 的 version。
-同步到：.claude-plugin/plugin.json 的 version、skills/ai-design-skills/VERSION。
+同步到：.claude-plugin/plugin.json 的 version、skills/ai-design-skills/VERSION、
+skills/ai-design-skills/SKILL.md frontmatter 的 version（SkillHub 发布要求）。
 
 为什么需要 VERSION 文件：`npx skills add` **只拷贝技能目录**，
 仓库根的 package.json 带不过去——运行时版本戳必须住在技能目录里。
@@ -15,6 +16,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -22,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PKG = ROOT / "package.json"
 PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
 VERSION = ROOT / "skills" / "ai-design-skills" / "VERSION"
+SKILL_MD = ROOT / "skills" / "ai-design-skills" / "SKILL.md"
 
 
 def main() -> int:
@@ -35,14 +38,19 @@ def main() -> int:
     plugin = json.loads(PLUGIN.read_text(encoding="utf-8"))
     runtime = VERSION.read_text(encoding="utf-8").strip() if VERSION.is_file() else ""
 
-    if plugin.get("version") == version and runtime == version:
+    skill_text = SKILL_MD.read_text(encoding="utf-8")
+    m = re.search(r"^version:\s*(\S+)\s*$", skill_text, flags=re.MULTILINE)
+    skill_version = m.group(1) if m else ""
+
+    if plugin.get("version") == version and runtime == version and skill_version == version:
         print(f"版本已一致：{version}")
         return 0
 
     if check_only:
         print(
             f"ERROR: 版本不一致 —— package.json={version}, "
-            f"plugin.json={plugin.get('version')}, VERSION={runtime or '<缺失>'}",
+            f"plugin.json={plugin.get('version')}, VERSION={runtime or '<缺失>'}, "
+            f"SKILL.md={skill_version or '<缺失>'}",
             file=sys.stderr,
         )
         return 1
@@ -50,7 +58,13 @@ def main() -> int:
     plugin["version"] = version
     PLUGIN.write_text(json.dumps(plugin, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     VERSION.write_text(f"{version}\n", encoding="utf-8")
-    print(f"已同步 plugin.json 与 VERSION 到 {version}")
+    if m:
+        skill_text = skill_text[:m.start()] + f"version: {version}" + skill_text[m.end():]
+    else:
+        # frontmatter 缺 version：插到 name 行之后
+        skill_text = re.sub(r"(?m)^(name: .*)$", rf"\1\nversion: {version}", skill_text, count=1)
+    SKILL_MD.write_text(skill_text, encoding="utf-8")
+    print(f"已同步 plugin.json、VERSION 与 SKILL.md 到 {version}")
     return 0
 
 
