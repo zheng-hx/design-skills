@@ -97,18 +97,20 @@ description: {d['name']}：{d['summary']} 当用户说「{triggers}」时使用�
 - **跨工种**：一个需求同时涉及多个工种时，用 `/design-router` 分流，各自出产物，不合并成一份四不像的稿。
 - **长尾工种**（室内 / 建筑 / 服装 / 珠宝等）没有独立技能，用 `/design-any` 走通用流水线，见 `工种索引.md`。
 
-## 前置：本技能自包含
+## 前置：共享工作台在哪里
 
-渲染后的 `.design/` 里，本技能读得到：
+本技能的共享资产在 `{{{{DESIGN_ROOT}}}}`（初始化时确定：默认用户全局 `~/.design/`，
+项目级为 `.design/`）。读文件前先把这个路径按当前机器的用户主目录展开。
 
-- `.design/rules/交互模式.md`（一次一问·决策树·对话内展示）
-- `.design/rules/状态机与收口.md`（六态状态机、收口与门禁）
-- `.design/rules/产物与来源规范.md`（frontmatter / dossier / 来源标记）
-- `.design/rules/设计通用规范.md`（所有设计工种共用的红线）
-- `.design/references/` 下按路由表**按需加载**，不要一次全读
+- `{{{{DESIGN_ROOT}}}}/rules/交互模式.md`（一次一问·决策树·对话内展示）
+- `{{{{DESIGN_ROOT}}}}/rules/状态机与收口.md`（六态状态机、收口与门禁）
+- `{{{{DESIGN_ROOT}}}}/rules/产物与来源规范.md`（frontmatter / dossier / 来源标记）
+- `{{{{DESIGN_ROOT}}}}/rules/设计通用规范.md`（所有设计工种共用的红线）
+- `{{{{DESIGN_ROOT}}}}/references/` 下按路由表**按需加载**，不要一次全读
 
-> `rules/` 与 `references/` 是**工种包级**的，位于 `.design/` 下，不随技能复制进工具目录；
-> 工具目录里只有 `SKILL.md` 与 `agents/`，这是正常的。
+> `rules/` 与 `references/` 是**工种包级**的，留在工作台里，不随技能复制进工具目录；
+> 工具目录里只有 `SKILL.md` 与 `agents/`（软链指向工作台），这是正常的。
+> **用户作品一律写当前项目的 `.design/artifacts/`**，不要写进全局工作台。
 
 ## 第 0 阶段：先确认现状（硬门禁）
 
@@ -151,9 +153,9 @@ description: {d['name']}：{d['summary']} 当用户说「{triggers}」时使用�
 | 什么时候 | 读哪个 |
 |---|---|
 {ref_rows}
-| 用户提到的工种不在 core 列表 | `.design/references/工种索引.md` |
-| 长尾工种要走通用流水线 | `.design/references/工种通用流水线.md` |
-| 用开源资料前确认许可边界 | `.design/references/许可与来源规范.md` |
+| 用户提到的工种不在 core 列表 | `{{{{DESIGN_ROOT}}}}/references/工种索引.md` |
+| 长尾工种要走通用流水线 | `{{{{DESIGN_ROOT}}}}/references/工种通用流水线.md` |
+| 用开源资料前确认许可边界 | `{{{{DESIGN_ROOT}}}}/references/许可与来源规范.md` |
 
 ## 交付前四步
 
@@ -251,7 +253,7 @@ def source_index(data) -> str:
         "1. 新增参考资料必须登记进 `disciplines.json` 的 `shared_references`，否则渲染校验判为死文件。",
         "2. 只搬「可检索的规则 / 结构 / 检查表」，不整包塞进技能目录——工种包是自包含的，"
         "整包塞会串引用、破校验。",
-        "3. 外部规则与本包门禁冲突时，以 `.design/rules/设计通用规范.md` 为准。",
+        "3. 外部规则与本包门禁冲突时，以 `{{DESIGN_ROOT}}/rules/设计通用规范.md` 为准。",
         "",
     ]
     return "\n".join(lines)

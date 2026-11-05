@@ -10,23 +10,24 @@
 
 ## 权威来源
 
-技能执行时以**渲染进目标项目、随技能一起安装**的规则为准：
+技能执行时以**渲染进用户全局工作台、随技能一起安装**的规则为准：
 
 ```text
-.design/rules/交互模式.md          # 一次一问、对话内展示、口吻
-.design/rules/状态机与收口.md      # 六态、收口、交付前四步
-.design/rules/产物与来源规范.md    # frontmatter（含 status）、dossier、来源标记
-.design/rules/设计通用规范.md      # 全工种红线
-.design/rules/人格.md              # 身份、口径与边界
-.design/disciplines.json           # 工种注册表（单一事实源）
-.design/skills/<工种>/SKILL.md     # 该工种自己的流水线
+~/.design/rules/交互模式.md          # 一次一问、对话内展示、口吻
+~/.design/rules/状态机与收口.md      # 六态、收口、交付前四步
+~/.design/rules/产物与来源规范.md    # frontmatter（含 status）、dossier、来源标记
+~/.design/rules/设计通用规范.md      # 全工种红线
+~/.design/rules/人格.md              # 身份、口径与边界
+~/.design/disciplines.json           # 工种注册表（单一事实源）
+~/.design/skills/<工种>/SKILL.md     # 该工种自己的流水线
 ```
 
-本目录下的文档是给人阅读的概览；两者不一致时，**以技能目录里的文件为准**。
+本目录下的文档是给人阅读的概览；两者不一致时，**以工作台里的文件为准**。
 
 ## 两个核心约定
 
-- **一个项目 = 一个设计师技能包**，包内按工种分技能，不做跨角色交接。
+- **设计师技能默认装到用户全局**：工作台 `~/.design/` 共享引擎只存一份，作品 `<当前项目>/.design/artifacts/` 按项目隔离；
+  注册到各 AI 工具的**用户全局技能目录**，装一次所有项目可用。
 - **分层交付**：19 个 core 工种有独立技能，18 个 extended 工种由 `/design-any` 兜底，并如实说明 AI 交付边界。
 
 ---

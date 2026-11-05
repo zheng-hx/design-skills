@@ -128,12 +128,14 @@ def main() -> int:
         text = p.read_text(encoding="utf-8")
         if ".roles/" in text:
             errs.append(f"{p.relative_to(ROOT)}: 渲染内容残留旧包路径 .roles/（复用规则未改路径）")
-        for name in re.findall(r"\.design/rules/([^\s`)、，。|]+\.md)", text):
-            if name not in rule_files:
-                errs.append(f"{p.relative_to(ROOT)}: 引用了不存在的规则 .design/rules/{name}")
-        for name in re.findall(r"\.design/references/([^\s`)、，。|]+\.md)", text):
-            if name not in ref_files:
-                errs.append(f"{p.relative_to(ROOT)}: 引用了不存在的参考 .design/references/{name}")
+        # 源模板用 {{DESIGN_ROOT}} 占位，渲染后变成 ~/.design 或 .design；三种前缀都认。
+        for kind, name in re.findall(
+            r"(?:\{\{DESIGN_ROOT\}\}|~/\.design|\.design)/(rules|references)/"
+            r"([^\s`)、，。|]+\.md)", text
+        ):
+            pool = rule_files if kind == "rules" else ref_files
+            if name not in pool:
+                errs.append(f"{p.relative_to(ROOT)}: 引用了不存在的 {kind}/{name}")
 
     if errs:
         for e in errs:

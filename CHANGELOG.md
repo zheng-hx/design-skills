@@ -4,6 +4,30 @@
 版本号规则：**一个对外发布版本 = 末位 +1**（1.0.0 → 1.1.0 …）。
 未提交的多批改动合并为一个版本——`/update-design-skills` 靠版本号判断本地是否过期。
 
+## [Unreleased]
+
+### 变更 · 默认全局安装（设计师技能是人的能力，装一次所有项目可用）
+
+- **工作台改为用户全局 `~/.design/`**：共享引擎（rules / templates / references / skills / 注册表）只存一份，
+  落在用户主目录；用户作品仍按当前项目落在 `<项目>/.design/artifacts/`，避免跨项目串稿。
+  原项目级 `.design/` 仍可通过 `--scope project` 开启（团队共享、可提交 Git）。
+- **安装默认 `--scope user`，按各工具真实目录规则探测**：规则落在 `tool-dirs.json`（单一事实源），
+  安装前 `probe-tool-dirs.py` 只读探测本机有哪些工具，再决定往哪装。
+  修掉三个「全局技能没生效」的根因：
+  1. Codex 的全局目录是 **`~/.agents/skills`**，不是旧版误写的 `~/.codex/skills`（旧版遗留，非技能发现目录）；
+  2. 补上 **WorkBuddy `~/.workbuddy/skills`**（旧版工具表完全漏了它）；
+  3. 检测依据从「项目内有没有 `.claude/`」改成「**用户全局工具根是否存在**」（多数项目里没有这些点目录）。
+- **只装检测到的目录，未检测到的一律不创建**：只用 WorkBuddy 时绝不出现 `~/.agents/`；
+  同时用了 Codex，才创建 `~/.agents/skills`。这与需求「按 AI 工具扫描路径只装对应目录」一致。
+- 三个公开入口命令（`apply` / `install` / `update`）默认一并注册到工具全局目录，
+  保证换到任何项目都能调用「全局初始化」这条命令。
+- `reconcile-skills.py` 支持 `--scope user|project`、`--home`（测试隔离）、`--tool`（显式指定视为检测到）；
+  门禁允许创建检测到的工具 `skills/` 子目录，但禁止写工具根目录、禁止写 `~/.codex/skills` 旧版遗留。
+- 文档与校验同步：`install-by-tool.md` 改为全局语义并列出全部工具目录；`audit-repo.py`
+  改为读 `tool-dirs.json` 校验「规则里每个目录都在文档列出」；`check-install-reconcile.py`
+  重写为临时 HOME 端到端回归（35 项断言：只装检测到目录 / 加 Codex 才建 ~/.agents / 幂等 /
+  清孤儿 / 用户技能共存 / 旧包清单共存 / copy 不误报 / 升级保留 artifacts）。
+
 ## [1.0.0] - 2026-11-05
 
 首个可用版本。基于 `shuhe-role-skills` 2.2.3 的引擎与安装机制改造而来，是**独立仓库、独立产物目录**。

@@ -6,12 +6,13 @@
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RECON = ROOT / "skills" / "install-design-skills" / "scripts" / "reconcile-skills.py"
+TOOL_DIRS = ROOT / "skills" / "install-design-skills" / "tool-dirs.json"
 DOC_TOOL = ROOT / "docs" / "install-by-tool.md"
 
 REQUIRED_FILES = (
@@ -48,19 +49,27 @@ def main() -> int:
 
     # .gitignore 关键项
     gi = (ROOT / ".gitignore").read_text(encoding="utf-8")
-    for key in (".design/", "__pycache__/", ".claude/skills/"):
+    for key in (".design/", "__pycache__/"):
         if key not in gi:
             errs.append(f".gitignore 缺关键项: {key}")
 
-    # 工具目录表与脚本一致：脚本里每个目录都要在安装文档里出现
-    if RECON.is_file() and DOC_TOOL.is_file():
-        src = RECON.read_text(encoding="utf-8")
+    # 工具目录表与文档一致：tool-dirs.json（单一事实源）里每个技能目录都要在
+    # docs/install-by-tool.md 出现；同时文档必须显式点名旧版遗留目录 ~/.codex/skills 不可写。
+    if TOOL_DIRS.is_file() and DOC_TOOL.is_file():
+        rules = json.loads(TOOL_DIRS.read_text(encoding="utf-8"))
         doc = DOC_TOOL.read_text(encoding="utf-8")
-        for tool in sorted(set(re.findall(r'"(\.[a-z]+/skills)"', src))):
-            if tool not in doc:
-                errs.append(f"docs/install-by-tool.md 未列出脚本支持的目录: {tool}")
+        seen: set[str] = set()
+        for tool in rules["tools"]:
+            for spec in (tool.get("user_skills", ""), tool.get("project_skills", "")):
+                if spec and spec not in seen:
+                    seen.add(spec)
+                    if spec not in doc:
+                        errs.append(f"docs/install-by-tool.md 未列出工具目录规则: {spec}")
+        for legacy in rules.get("not_skill_dirs", {}):
+            if legacy not in doc:
+                errs.append(f"docs/install-by-tool.md 未说明不可写目录: {legacy}")
     else:
-        errs.append("缺 reconcile-skills.py 或 docs/install-by-tool.md")
+        errs.append("缺 tool-dirs.json 或 docs/install-by-tool.md")
 
     # 残留物：只查「不该出现在技能源仓库里的渲染产物」。
     # Python 运行缓存（__pycache__ / *.pyc）已被 .gitignore 和 .npmignore 排除，

@@ -1,29 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""reconcile-skills.py — 按 AI 工具扫描路径，把 .design/skills/ 对账注册到工具目录。
+"""reconcile-skills.py — 按 AI 工具真实目录规则，把共享工作台的技能注册到工具技能目录。
 
-与 shuhe-role-skills 旧版的两点关键差异（本包的改造点）：
+与旧版的三点关键差异：
 
-1. **扫描到的全装**：不再「取第一个匹配」。检测项目内**所有**已存在的 AI 工具目录，
-   每个都做一次声明式对账并建软链；**未检测到的目录一律不写**。
-   用户多 AI 工具并用（Claude Code + Cursor + Codex …）时，每个工具都能读到命令。
-2. **幂等模式不误报**：旧版在无任何安装动作时把 used_mode 写成 "symlink"，
-   但实际可能是 copy。本版按技能逐个记录真实 mode 并落进清单，重复执行结果恒定。
+1. **默认用户全局**（`--scope user`）：设计师技能是人的能力，装一次所有项目能用。
+   旧版只写项目内目录、还明确禁止写用户主目录，导致「全局技能没生效」。
+2. **按工具真实规则探测**：规则在 ../tool-dirs.json，安装前先 probe 出
+   「本机有哪些工具、各自全局/项目级技能目录在哪」，再决定往哪装。
+   Codex 的全局目录是 ~/.agents/skills，不是 ~/.codex/skills；WorkBuddy 是 ~/.workbuddy/skills。
+3. **只写检测到的目录，未检测到的一律不创建**：只用 WorkBuddy 时绝不出现 ~/.agents/；
+   同时用了 Codex 才写 ~/.agents/skills。
 
-对账规则（幂等）：
-    期望集合 = <project>/.design/skills/ 下所有含 SKILL.md 的技能（名字取 frontmatter name）
-    本技能拥有 = <tool-dir>/.design-managed.json 记录的 + 指向本项目 .design/skills 的软链（含断链）
-    多退少补：
-      在集合内且正确         → 保留
-      在集合内但过期/不一致   → 删除后重建
-      不在工具目录           → 新建
-      本技能拥有但不在集合    → 删除（清孤儿）
-      不是本技能拥有（用户自己的技能）→ 绝不碰
+对账规则（幂等、声明式）：
+    期望集合 = 工作台 skills/ 下所有含 SKILL.md 的工种技能 + 三个公开入口命令
+    本包拥有 = .design-managed.json 记录的 + 指向工作台/入口源的软链（含断链）
+    多退少补：在集合内且正确→保留 / 过期→重建 / 缺失→新建 / 不在集合→清孤儿
+    不是本包拥有的（用户自己的技能）→ 绝不碰；同名冲突也跳过并告警
 
 用法:
-    python3 reconcile-skills.py --project <项目根> --scan
-    python3 reconcile-skills.py --project <项目根> --tool-dir .claude/skills --tool-dir .cursor/skills
-        [--mode auto|symlink|copy] [--dry-run]
+    python3 reconcile-skills.py --scope user                 # 默认：用户全局、自动探测
+    python3 reconcile-skills.py --tool workbuddy --tool codex
+    python3 reconcile-skills.py --scope project --project <项目根>
+    HOME=/tmp/fake-home python3 reconcile-skills.py --dry-run
 """
 from __future__ import annotations
 
@@ -35,20 +34,11 @@ import shutil
 import sys
 from pathlib import Path
 
-MANIFEST = ".design-managed.json"
+from tool_dirs import artifacts_dir, load_rules, probe, render_table, workbench
 
-# 检测特征与技能目录成对：marker 目录存在，才认为这个工具在该项目里被使用。
-# 顺序只影响输出顺序，不再影响「装哪个」——检测到的全装。
-TOOL_DIRS = [
-    ("Claude Code / Cline", ".claude", ".claude/skills"),
-    ("Codex", ".codex", ".codex/skills"),
-    ("通用 Agent Skills", ".agents", ".agents/skills"),
-    ("Cursor", ".cursor", ".cursor/skills"),
-    ("OpenClaw", ".openclaw", ".openclaw/skills"),
-    ("CodeBuddy", ".codebuddy", ".codebuddy/skills"),
-    ("Qoder", ".qoder", ".qoder/skills"),
-    ("Reasonix", ".reasonix", ".reasonix/skills"),
-]
+MANIFEST = ".design-managed.json"
+ENTRIES = ("apply-design-skills", "install-design-skills", "update-design-skills")
+SKILLS_SRC = Path(__file__).resolve().parents[2]  # <技能源>/skills/
 
 
 def die(msg: str) -> None:
@@ -75,21 +65,34 @@ def dir_hash(d: Path) -> str:
     return h.hexdigest()
 
 
-def expected(project: Path) -> dict[str, Path]:
-    root = project / ".design" / "skills"
+def expected(wb: Path, include_entries: bool) -> tuple[dict[str, Path], list[Path]]:
+    """返回（技能名→源目录, 允许的软链源根列表）。"""
+    root = wb / "skills"
     if not root.is_dir():
-        die(f"未找到 .design/skills/ —— 请先运行 /apply-design-skills")
+        die(f"未找到工作台技能目录 {root} —— 请先运行 /apply-design-skills 生成共享工作台")
+    sources = [root.resolve()]
     out: dict[str, Path] = {}
     for d in sorted(p for p in root.iterdir() if p.is_dir()):
-        skill_md = d / "SKILL.md"
-        if not skill_md.is_file():
-            continue
-        out[frontmatter_name(skill_md) or d.name] = d
-    return out
+        sm = d / "SKILL.md"
+        if sm.is_file():
+            out[frontmatter_name(sm) or d.name] = d
+
+    # 三个公开入口（含「全局初始化」命令）也要注册到工具全局目录，
+    # 否则换到别的项目就没法调用 /apply-design-skills。
+    if include_entries:
+        added = False
+        for name in ENTRIES:
+            d = SKILLS_SRC / name
+            sm = d / "SKILL.md"
+            if sm.is_file():
+                out[frontmatter_name(sm) or name] = d
+                added = True
+        if added:
+            sources.append(SKILLS_SRC.resolve())
+    return out, sources
 
 
 def read_manifest(tool_dir: Path) -> tuple[set[str], dict[str, str]]:
-    """返回（已登记的技能名集合, 每个技能的实际模式）。兼容旧版只有 managed 的清单。"""
     mf = tool_dir / MANIFEST
     if not mf.is_file():
         return set(), {}
@@ -100,25 +103,25 @@ def read_manifest(tool_dir: Path) -> tuple[set[str], dict[str, str]]:
     managed = set(data.get("managed", []))
     modes = data.get("modes")
     if not isinstance(modes, dict):
-        # 旧格式：只有顶层 mode。信息不足时留空，由对账重新探测实际类型。
         modes = {}
     return managed, modes
 
 
-def owned(tool_dir: Path, project: Path, managed: set[str]) -> set[str]:
-    """本技能拥有的技能名：清单记录的 + 指向本项目 .design/skills 的软链（含断链）。"""
+def owned(tool_dir: Path, sources: list[Path], managed: set[str]) -> set[str]:
+    """本包拥有的技能名：清单记录的 + 指向工作台/入口源的软链（含断链）。"""
     result = set(managed)
-    if tool_dir.is_dir():
-        for p in tool_dir.iterdir():
-            if not p.is_symlink():
-                continue
-            try:
-                real = p.resolve()
-            except OSError:
-                result.add(p.name)  # 断链：算我们拥有，才能清掉
-                continue
-            if str(real).startswith(str((project / ".design" / "skills").resolve())):
-                result.add(p.name)
+    if not tool_dir.is_dir():
+        return result
+    for p in tool_dir.iterdir():
+        if not p.is_symlink():
+            continue
+        try:
+            real = p.resolve()
+        except OSError:
+            result.add(p.name)  # 断链：算我们拥有，才能清掉
+            continue
+        if any(str(real).startswith(str(s)) for s in sources):
+            result.add(p.name)
     return result
 
 
@@ -131,7 +134,7 @@ def is_correct(target: Path, src: Path, mode: str) -> bool:
         except OSError:
             return False
     if mode == "symlink":
-        return False  # 期望软链但当前是实体目录 → 重建
+        return False
     if not target.is_dir():
         return False
     return dir_hash(target) == dir_hash(src)
@@ -145,7 +148,6 @@ def remove(target: Path) -> None:
 
 
 def install(target: Path, src: Path, mode: str) -> str:
-    """返回实际使用的模式。"""
     if mode in ("auto", "symlink"):
         try:
             rel = os.path.relpath(src.resolve(), target.parent.resolve())
@@ -158,15 +160,24 @@ def install(target: Path, src: Path, mode: str) -> str:
     return "copy"
 
 
-def reconcile_one(project: Path, tool_rel: str, label: str, exp: dict[str, Path],
-                  mode: str, dry_run: bool) -> dict:
-    tool_dir = (project / tool_rel).resolve()
-    if not str(tool_dir).startswith(str(project)):
-        die(f"工具目录必须在项目内（禁止写用户全局目录）：{tool_dir}")
+def guard(tool_dir: Path, scope: str, home: Path, project: Path) -> None:
+    """作用域门禁：只许写本作用域根目录下，且不许写工具根目录或旧版目录。"""
+    allowed = home if scope == "user" else project
+    if not str(tool_dir).startswith(str(allowed)):
+        die(f"越界：{tool_dir} 不在 {'用户主目录' if scope == 'user' else '项目'} {allowed} 内")
+    if tool_dir.name != "skills":
+        die(f"{tool_dir} 不是 skills 目录（工具根目录本身不会被扫描）")
+    # Codex 旧版遗留目录不是技能发现目录，禁止写入
+    if tool_dir == home / ".codex" / "skills" or tool_dir == project / ".codex" / "skills":
+        die(f"{tool_dir} 是旧版遗留目录，不是技能发现目录；请检查 tool-dirs.json")
 
+
+def reconcile_one(tool_dir: Path, label: str, exp: dict[str, Path], sources: list[Path],
+                  mode: str, dry_run: bool, scope: str, wb: Path) -> dict:
     managed, known_modes = read_manifest(tool_dir)
-    have = owned(tool_dir, project, managed)
+    have = owned(tool_dir, sources, managed)
     added = updated = removed = 0
+    skipped: list[str] = []
     modes: dict[str, str] = {}
 
     if not dry_run:
@@ -178,15 +189,17 @@ def reconcile_one(project: Path, tool_rel: str, label: str, exp: dict[str, Path]
             remove(tool_dir / name)
         removed += 1
 
-    # 2) 新建 / 更新 / 保留
+    # 2) 新建 / 更新 / 保留；用户自己的同名技能绝不碰
     for name, src in sorted(exp.items()):
         target = tool_dir / name
         exists = target.exists() or target.is_symlink()
         if exists and is_correct(target, src, mode):
-            # 幂等路径：探测真实类型，不猜。
             modes[name] = "symlink" if target.is_symlink() else (
                 known_modes.get(name) or "copy"
             )
+            continue
+        if exists and name not in have:
+            skipped.append(name)
             continue
         if exists:
             if not dry_run:
@@ -199,70 +212,92 @@ def reconcile_one(project: Path, tool_rel: str, label: str, exp: dict[str, Path]
         else:
             modes[name] = "symlink" if mode != "copy" else "copy"
 
-    # 3) 落清单（按技能记录真实 mode，幂等不再误报）
+    # 3) 落清单（按技能记录真实 mode + 作用域，幂等不再误报）
     if not dry_run:
         (tool_dir / MANIFEST).write_text(
-            json.dumps(
-                {"package": "ai-design-skills", "managed": sorted(exp), "modes": modes},
-                ensure_ascii=False, indent=2,
-            ) + "\n",
+            json.dumps({
+                "package": "ai-design-skills",
+                "scope": scope,
+                "workbench": str(wb),
+                "managed": sorted(exp),
+                "modes": modes,
+            }, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
 
     used = sorted(set(modes.values()))
     return {
-        "label": label, "tool_dir": tool_rel,
+        "label": label, "tool_dir": str(tool_dir),
         "added": added, "updated": updated, "removed": removed,
+        "skipped": skipped,
         "mode": "/".join(used) if used else "-",
         "count": len(exp),
     }
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="扫描 AI 工具目录并对账注册设计技能")
-    ap.add_argument("--project", required=True, help="目标项目根目录")
-    ap.add_argument("--scan", action="store_true",
-                    help="扫描项目内所有已存在的 AI 工具目录，只向检测到的目录安装")
+    ap = argparse.ArgumentParser(description="按工具真实目录规则对账注册设计技能")
+    ap.add_argument("--scope", choices=["user", "project"], default=None,
+                    help="默认取 tool-dirs.json 的 default_scope（user = 用户全局）")
+    ap.add_argument("--home", default=None, help="覆盖用户主目录（测试用）")
+    ap.add_argument("--project", default=None, help="当前项目根目录（默认 cwd）")
+    ap.add_argument("--workbench", default=None, help="覆盖共享工作台路径（测试用）")
+    ap.add_argument("--tool", action="append", default=[],
+                    help="只装指定工具 key，可多次；显式指定视为检测到")
     ap.add_argument("--tool-dir", action="append", default=[],
-                    help="显式指定工具技能目录（可多次）；与 --scan 可并用")
+                    help="兼容参数：显式追加技能目录（相对项目根或绝对路径）")
     ap.add_argument("--mode", choices=["auto", "symlink", "copy"], default="auto")
+    ap.add_argument("--no-entries", action="store_true",
+                    help="不注册三个公开入口命令（默认注册）")
+    ap.add_argument("--scan", action="store_true", help="兼容参数；默认行为就是扫描探测")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
-    if not args.scan and not args.tool_dir:
-        die("请指定 --scan（推荐）或至少一个 --tool-dir")
+    rules = load_rules()
+    scope = args.scope or rules["default_scope"]
+    home = Path(args.home).resolve() if args.home else Path.home().resolve()
+    project = Path(args.project).resolve() if args.project else Path.cwd().resolve()
+    wb = Path(args.workbench).resolve() if args.workbench else workbench(scope, home, project)
 
-    project = Path(args.project).resolve()
-    exp = expected(project)
+    exp, sources = expected(wb, include_entries=not args.no_entries)
 
-    targets: list[tuple[str, str]] = []
-    if args.scan:
-        for label, marker, skills in TOOL_DIRS:
-            if (project / marker).is_dir():
-                targets.append((skills, label))
+    rows = probe(scope, home, project, only=set(args.tool) or None)
+    targets: list[tuple[Path, str]] = [
+        (r["skills_dir"], r["name"]) for r in rows if r["will_write"]
+    ]
     for t in args.tool_dir:
-        if (t, "显式指定") not in targets:
-            targets.append((t, "显式指定"))
+        p = Path(t).resolve() if os.path.isabs(t) else (project / t).resolve()
+        if (p, "显式指定") not in targets:
+            targets.append((p, "显式指定"))
+
+    print(render_table(rows, home))
+    print(f"\n工作台: {wb}（scope={scope}）")
+    print(f"用户作品: {artifacts_dir(project)}（按项目隔离，不进工作台）")
+    print(f"期望技能: {len(exp)} 个（{'含' if not args.no_entries else '不含'}公开入口命令）")
 
     if not targets:
-        die("项目内没有检测到任何 AI 工具目录（.claude/ .codex/ .cursor/ 等）。"
-            "按「只装检测到的目录」原则，不擅自创建。请先用 --tool-dir 指定，或先初始化对应工具。")
+        die("未检测到任何 AI 工具目录。按「只装检测到的目录」原则，不擅自创建。"
+            "请先用 --tool 指定，或先初始化对应工具。")
 
     results = []
-    for tool_rel, label in targets:
-        results.append(reconcile_one(project, tool_rel, label, exp, args.mode, args.dry_run))
+    for tool_dir, label in targets:
+        guard(tool_dir, scope, home, project)
+        results.append(reconcile_one(tool_dir, label, exp, sources,
+                                     args.mode, args.dry_run, scope, wb))
 
     prefix = "[dry-run] " if args.dry_run else ""
-    print(f"{prefix}扫描到 {len(targets)} 个 AI 工具目录；期望技能 {len(exp)} 个")
+    print(f"\n{prefix}对账结果（{len(targets)} 个工具目录）：")
     for r in results:
-        print(f"  {r['label']:<22} {r['tool_dir']:<24} "
+        d = r["tool_dir"].replace(str(home), "~")
+        print(f"  {r['label']:<34}{d:<38}"
               f"新增 {r['added']} / 更新 {r['updated']} / 移除 {r['removed']} "
               f"（mode={r['mode']}）")
-    if args.scan:
-        all_tools = [s for _, _, s in TOOL_DIRS]
-        skipped = [s for s in all_tools if s not in {t for t, _ in targets}]
-        if skipped:
-            print(f"  未检测到、已跳过：{', '.join(skipped)}")
+        if r["skipped"]:
+            print(f"    ⚠ 用户自己的同名技能，已跳过不碰：{', '.join(r['skipped'])}")
+    skipped_tools = [r["name"] for r in rows if not r["will_write"]]
+    if skipped_tools:
+        print(f"  未检测到、未创建任何目录：{'、'.join(skipped_tools)}")
+    print("  提示：部分工具需重启会话 / 重载窗口才能看到新命令。")
     return 0
 
 

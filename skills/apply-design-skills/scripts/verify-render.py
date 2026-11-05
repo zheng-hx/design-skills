@@ -50,6 +50,9 @@ def main() -> int:
             errs.append(f"design.json 不是合法 JSON: {e}")
         need(cfg.get("package") == "ai-design-skills", "design.json 的 package 不正确")
         need(bool(cfg.get("package_version")), "design.json 缺 package_version")
+        need(cfg.get("scope") in ("user", "project"), "design.json 的 scope 必须是 user / project")
+        need(bool(cfg.get("workbench")), "design.json 缺 workbench 工作台路径")
+        need(bool(cfg.get("design_root")), "design.json 缺 design_root 共享资产路径")
         need(isinstance(cfg.get("disciplines"), list) and bool(cfg.get("disciplines")),
              "design.json 的 disciplines 必须是非空数组")
 
@@ -122,7 +125,11 @@ def main() -> int:
                 need(k in skill_names, f"选中工种 {k} 未渲染成技能")
 
     # 7. 占位符残留 + 引用可达（渲染过的文本文件）
-    ref_in_skill = re.compile(r"\.design/references/([^\s`)、，。|]+\.md)")
+    #    工作台可能是 ~/.design（全局）或 .design（项目级），两种前缀都要认。
+    rules_have = {p.name for p in (root / "rules").glob("*.md")} if (root / "rules").is_dir() else set()
+    ref_in_skill = re.compile(
+        r"(?:~/\.design|\.design)/(references|rules)/([^\s`)、，。|]+\.md)"
+    )
     scan = [root / "design.json", root / "README.md"]
     scan += list((root / "rules").glob("*.md")) if (root / "rules").is_dir() else []
     scan += list((root / "templates").glob("*.md")) if (root / "templates").is_dir() else []
@@ -134,9 +141,10 @@ def main() -> int:
         left = PLACEHOLDER_RE.findall(text)
         if left:
             errs.append(f"{p.relative_to(root)}: 占位符未替换 {sorted(set(left))}")
-        for name in ref_in_skill.findall(text):
-            if name not in have_refs:
-                errs.append(f"{p.relative_to(root)}: 引用了不存在的参考 .design/references/{name}")
+        for kind, name in ref_in_skill.findall(text):
+            pool = have_refs if kind == "references" else rules_have
+            if name not in pool:
+                errs.append(f"{p.relative_to(root)}: 引用了不存在的 {kind}/{name}")
 
     # 8. README 存在
     need((root / "README.md").is_file(), "缺少 .design/README.md")
