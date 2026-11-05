@@ -5,7 +5,8 @@
 管的是「装得上、结构对、公开/隐藏边界不破、生成物不漂移」：
   1. 公开入口（单技能）：SKILL.md + frontmatter(name/description) + agents/openai.yaml
   2. 隐藏层边界：capabilities/ 下不得出现 SKILL.md（必须叫 CAPABILITY.md），
-     技能模板必须是 .md.tpl，不能被工具直接扫成命令
+     技能模板必须带 .template. 中缀（.template.md/.template.yaml），不能被工具直接扫成命令
+     （SkillHub 发布 API 拒收 .tpl 与无扩展名文件，故不用 .tpl 后缀）
   3. 注册表 → 生成物不漂移（跑 build-disciplines.py --check）
   4. references 与 shared_references 完全对账
   5. 占位符全覆盖：capabilities 里出现的每个 {{XXX}} 都必须在渲染脚本里有定义
@@ -69,9 +70,10 @@ def main() -> int:
     else:
         for p in CAPS.rglob("SKILL.md"):
             errs.append(f"隐藏层出现可发现的 SKILL.md: {p.relative_to(ROOT)}")
-        for p in CAPS.rglob("*.md.tpl"):
-            if "skills" not in p.parts and "templates" not in p.parts:
-                errs.append(f"模板放错目录: {p.relative_to(ROOT)}")
+        for pattern in ("*.template.md", "*.template.yaml", "*.template.json"):
+            for p in CAPS.rglob(pattern):
+                if "skills" not in p.parts and "templates" not in p.parts:
+                    errs.append(f"模板放错目录: {p.relative_to(ROOT)}")
         for cap in ("design-core", "design-disciplines"):
             if not (CAPS / cap / "CAPABILITY.md").is_file():
                 errs.append(f"capabilities/{cap} 缺 CAPABILITY.md")
@@ -97,7 +99,7 @@ def main() -> int:
     defined = set(re.findall(r'"\{\{([A-Z_]+)\}\}"\s*:', render_src))
     used: set[str] = set()
     for p in CAPS.rglob("*"):
-        if p.is_file() and p.suffix in (".md", ".tpl", ".json"):
+        if p.is_file() and p.suffix in (".md", ".json", ".yaml"):
             used |= set(PLACEHOLDER_RE.findall(p.read_text(encoding="utf-8")))
     for ph in sorted(used - defined):
         errs.append(f"占位符 {{{{ {ph} }}}} 在 capabilities 中出现但渲染脚本未定义")
@@ -111,10 +113,10 @@ def main() -> int:
     # 7. 技能目录完整性
     core = [d["key"] for d in data["disciplines"] if d["tier"] == "core"]
     for k in core:
-        if not (DISC_SKILLS / k / "SKILL.md.tpl").is_file():
-            errs.append(f"core 工种 {k} 缺 SKILL.md.tpl")
-        if not (DISC_SKILLS / k / "agents" / "openai.yaml.tpl").is_file():
-            errs.append(f"core 工种 {k} 缺 agents/openai.yaml.tpl")
+        if not (DISC_SKILLS / k / "SKILL.template.md").is_file():
+            errs.append(f"core 工种 {k} 缺 SKILL.template.md")
+        if not (DISC_SKILLS / k / "agents" / "openai.template.yaml").is_file():
+            errs.append(f"core 工种 {k} 缺 agents/openai.template.yaml")
 
     # 8. 渲染内容不得残留旧包路径；.design/rules|references 引用必须可达
     #    （抓的是「复用规则时忘了把 .roles/ 改成 .design/」这类路径残留事故）
@@ -122,7 +124,7 @@ def main() -> int:
     ref_files = {p.name for p in REFS.glob("*.md")}
     scanned = 0
     for p in CAPS.rglob("*"):
-        if not p.is_file() or p.suffix not in (".md", ".tpl") or p.name == "CAPABILITY.md":
+        if not p.is_file() or p.suffix not in (".md", ".json", ".yaml") or p.name == "CAPABILITY.md":
             continue
         scanned += 1
         text = p.read_text(encoding="utf-8")

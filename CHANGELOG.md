@@ -10,9 +10,15 @@
 
 - **根因**：SkillHub 从 GitHub 导入只收录识别扩展名的文本文件（.md/.py/.json/.yaml，恰 28 个），
   全部 54 个 `.tpl` 模板与无扩展名的 `VERSION` 被丢弃——导致安装后无法渲染工作台。
+- **后继发现**：发布 API 服务端同样拒收 `.tpl` 与无扩展名文件（400「不允许的文件类型」）。
+  故全包改名以适配平台白名单，架构不变：
+  - `SKILL.md.tpl` → `SKILL.template.md`；`agents/openai.yaml.tpl` → `agents/openai.template.yaml`；
+  - `templates/*.md.tpl` → `*.template.md`；`design.json.tpl` → `design.template.json`；
+  - `VERSION` → `version.json`（`{"version": …}`）。
+  - 渲染器 / 生成器 / 校验脚本同步改造；渲染产物名不变（SKILL.md / openai.yaml / design.json）。
 - `SKILL.md` frontmatter 补 `slug` / `displayName` / `version`（SkillHub CLI 发布要求）；
   `sync-version.py` 同步范围扩展到 SKILL.md 的 `version`，保持单一事实源。
-- 发布通道改为 `skillhub publish`（CLI zip 打包无扩展名白名单，全量文件入库），版本升 1.0.1。
+- 发布通道改为 `skillhub publish`（CLI zip 打包），版本升 1.0.1。
 
 ## [Unreleased]
 

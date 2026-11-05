@@ -51,6 +51,13 @@ def fail(msg: str) -> None:
 
 
 def package_version() -> str:
+    vj = SKILL_DIR / "version.json"
+    if vj.is_file():
+        try:
+            return json.loads(vj.read_text(encoding="utf-8"))["version"]
+        except (ValueError, KeyError):
+            pass
+    # 兼容旧版裸文本 VERSION 文件
     vf = SKILL_DIR / "VERSION"
     return vf.read_text(encoding="utf-8").strip() if vf.is_file() else "unknown"
 
@@ -93,7 +100,7 @@ def main() -> None:
 
     ver = package_version()
     if ver == "unknown":
-        fail("技能包不完整：缺少 skills/ai-design-skills/VERSION——无法确定版本，不继续")
+        fail("技能包不完整：缺少 skills/ai-design-skills/version.json——无法确定版本，不继续")
 
     data = json.loads(REGISTRY.read_text(encoding="utf-8"))
     all_disciplines = data["disciplines"]
@@ -167,7 +174,7 @@ def main() -> None:
                         shutil.copy2(src, stage / name)
 
         # 1. 配置：design.json 出到 .design/ 根，注册表逐字复制
-        render_file(CAPS / "design-core/templates/design.json.tpl", stage / "design.json")
+        render_file(CAPS / "design-core/templates/design.template.json", stage / "design.json")
         shutil.copyfile(REGISTRY, stage / "disciplines.json")
         print("配置: design.json + disciplines.json")
 
@@ -190,8 +197,9 @@ def main() -> None:
             d = CAPS / sub
             if not d.is_dir():
                 continue
-            for f in sorted(d.glob("*.md.tpl")):
-                out = (stage / "README.md") if f.name == "README.md.tpl" else (tdir / f.name[:-4])
+            for f in sorted(d.glob("*.template.md")):
+                out = (stage / "README.md") if f.name == "README.template.md" \
+                    else (tdir / f.name.replace(".template.md", ".md"))
                 render_file(f, out)
                 n += 1
         print(f"templates/: {n} 个")
@@ -219,8 +227,8 @@ def main() -> None:
                 fail(f"选中工种缺少技能目录: {key}")
             out_dir = stage / "skills" / key
             (out_dir / "agents").mkdir(parents=True, exist_ok=True)
-            render_file(sdir / "SKILL.md.tpl", out_dir / "SKILL.md")
-            agents = sdir / "agents" / "openai.yaml.tpl"
+            render_file(sdir / "SKILL.template.md", out_dir / "SKILL.md")
+            agents = sdir / "agents" / "openai.template.yaml"
             if agents.is_file():
                 render_file(agents, out_dir / "agents" / "openai.yaml")
         print(f"skills/: {len(set(selected_skills))} 个（模式 {mode}，选中工种 {len(selected)}）")

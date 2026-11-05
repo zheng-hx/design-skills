@@ -19,7 +19,7 @@ REQUIRED_FILES = (
     "README.md", "CHANGELOG.md", "LICENSE", "package.json",
     ".gitignore", ".npmignore", ".claude-plugin/plugin.json",
     ".claude-plugin/marketplace.json",
-    "skills/ai-design-skills/VERSION",
+    "skills/ai-design-skills/version.json",
     "skills/ai-design-skills/SKILL.md",
 )
 

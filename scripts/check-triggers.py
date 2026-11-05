@@ -62,9 +62,9 @@ def main() -> int:
         if key not in present:
             errs.append(f"core 工种缺技能目录: {key}")
             continue
-        f = SKILLS / key / "SKILL.md.tpl"
+        f = SKILLS / key / "SKILL.template.md"
         if not f.is_file():
-            errs.append(f"{key}: 缺 SKILL.md.tpl")
+            errs.append(f"{key}: 缺 SKILL.template.md")
             continue
         text = f.read_text(encoding="utf-8")
         fm = frontmatter(text)
@@ -78,9 +78,9 @@ def main() -> int:
         if not hit:
             errs.append(f"{key}: description 未包含任何本工种触发词")
 
-        y = SKILLS / key / "agents" / "openai.yaml.tpl"
+        y = SKILLS / key / "agents" / "openai.template.yaml"
         if not y.is_file():
-            errs.append(f"{key}: 缺 agents/openai.yaml.tpl")
+            errs.append(f"{key}: 缺 agents/openai.template.yaml")
         else:
             yt = y.read_text(encoding="utf-8")
             sm = re.search(r"short_description:\s*\"([^\"]+)\"", yt)
@@ -91,7 +91,7 @@ def main() -> int:
 
     # 4. 入口技能也要触发式
     for e in ENTRIES:
-        f = SKILLS / e / "SKILL.md.tpl"
+        f = SKILLS / e / "SKILL.template.md"
         if not f.is_file():
             errs.append(f"缺入口技能 {e}")
             continue

@@ -135,7 +135,7 @@ def main() -> int:
     scan += list((root / "templates").glob("*.md")) if (root / "templates").is_dir() else []
     scan += list(skills_root.rglob("*")) if skills_root.is_dir() else []
     for p in scan:
-        if not p.is_file() or p.suffix not in (".md", ".json", ".yaml", ".tpl"):
+        if not p.is_file() or p.suffix not in (".md", ".json", ".yaml"):
             continue
         text = p.read_text(encoding="utf-8")
         left = PLACEHOLDER_RE.findall(text)

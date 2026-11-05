@@ -5,10 +5,13 @@
 注册表是单一事实源：改工种只改 JSON，然后跑本脚本重生成，不要手改模板。
 
 生成物（都入库，运行时不需要 Python）：
-    capabilities/design-disciplines/skills/<core-key>/SKILL.md.tpl
-    capabilities/design-disciplines/skills/<core-key>/agents/openai.yaml.tpl
+    capabilities/design-disciplines/skills/<core-key>/SKILL.template.md
+    capabilities/design-disciplines/skills/<core-key>/agents/openai.template.yaml
     capabilities/design-disciplines/references/工种索引.md
     capabilities/design-disciplines/references/开源资料索引.md
+
+（模板不用 .tpl 后缀、版本文件用 version.json：SkillHub 发布 API 只接受
+md/py/json/yaml 等常见文本类型，无扩展名与 .tpl 会被 400 拒收。）
 
 用法:
     python3 build-disciplines.py            # 生成
@@ -257,8 +260,8 @@ def build(data, check: bool) -> int:
     for d in data["disciplines"]:
         if d["tier"] == "core":
             base = DISC / "skills" / d["key"]
-            wanted[base / "SKILL.md.tpl"] = skill_md(d, data)
-            wanted[base / "agents" / "openai.yaml.tpl"] = openai_yaml(d)
+            wanted[base / "SKILL.template.md"] = skill_md(d, data)
+            wanted[base / "agents" / "openai.template.yaml"] = openai_yaml(d)
     wanted[DISC / "references" / "工种索引.md"] = discipline_index(data)
     wanted[DISC / "references" / "开源资料索引.md"] = source_index(data)
 
