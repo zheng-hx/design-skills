@@ -18,8 +18,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REGISTRY = ROOT / "skills" / "apply-design-skills" / "capabilities" / "design-core" / "disciplines.json"
-SKILLS = ROOT / "skills" / "apply-design-skills" / "capabilities" / "design-disciplines" / "skills"
+REGISTRY = ROOT / "skills" / "ai-design-skills" / "capabilities" / "design-core" / "disciplines.json"
+SKILLS = ROOT / "skills" / "ai-design-skills" / "capabilities" / "design-disciplines" / "skills"
 ENTRIES = ("design-router", "design-any")
 
 

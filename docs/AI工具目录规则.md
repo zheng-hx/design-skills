@@ -2,7 +2,7 @@
 
 > **为什么有这篇**：技能写对了、装错目录 = 不生效。这是「全局技能没生效」最常见的根因。
 > 本包安装前**先探测**各工具真实的全局 / 项目技能目录，再决定往哪装；规则单一事实源是
-> `skills/install-design-skills/tool-dirs.json`，脚本与本文都从它读。
+> `skills/ai-design-skills/tool-dirs.json`，脚本与本文都从它读。
 >
 > 调研日期：2026-11-05。本机实测 + 官方文档双证据。
 
@@ -84,14 +84,14 @@
 
 ```bash
 # ① 先查看规则与本机检测结果（只读，不写任何文件）
-python3 <install-design-skills>/scripts/probe-tool-dirs.py
+python3 <ai-design-skills>/scripts/probe-tool-dirs.py
 
 # ② 只看某几个工具（模拟「只用 WorkBuddy」）
 python3 probe-tool-dirs.py --tool workbuddy
 python3 probe-tool-dirs.py --tool workbuddy --tool codex
 
 # ③ 按探测结果安装（默认用户全局）
-python3 <install-design-skills>/scripts/reconcile-skills.py --scope user
+python3 <ai-design-skills>/scripts/reconcile-skills.py --scope user
 
 # ④ 项目级（可选）
 python3 reconcile-skills.py --scope project --project <项目根>

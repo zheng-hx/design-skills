@@ -17,7 +17,7 @@
 | 5 | 9 份 references、9 份产物模板、19 份工种技能模板、19 份 openai.yaml | 渲染 dry-run |
 | 6 | GitHub 设计类技能项目调研与按许可分级整合 | [开源资料与致谢](开源资料与致谢.md) |
 | 7 | 渲染脚本：工种过滤 / 逐字保真 / 结构校验 / `artifacts/` 保护 / `--dry-run` | `verify-render.py` |
-| 8 | 三公开入口：生成 / 安装 / 更新 | 包结构校验 |
+| 8 | 单技能入口（生成 / 安装 / 更新合一） | 包结构校验 |
 | 9 | **多 AI 工具扫描全装**，未检测目录不写；清单按技能记录真实 mode | `check-install-reconcile.py` 30 项断言 |
 | 10 | 三层升级、5 种版本分流、仓库地址不硬编码 | 入口技能说明 |
 | 11 | 7 道发布校验（版本 / 结构 / 触发词 / 评测自洽 / 安装回归 / 渲染 / 仓库卫生） | `npm run check:all` |
@@ -45,8 +45,8 @@
 - [ ] **填真实仓库地址**：`npx skills add <REPO_URL>` 与 `skills-lock.json` 目前是占位；
       升级流程读不到地址会明确报错，这是刻意的，但发布前必须换成实际地址。
 - [ ] **首次发布与版本对账**：确认 `package.json` / `.claude-plugin/plugin.json` /
-      `skills/apply-design-skills/VERSION` 三处一致（`npm run check-version`）。
-- [ ] **在真实宿主里跑一遍三入口**：`check-install-reconcile.py` 验的是脚本行为，
+      `skills/ai-design-skills/VERSION` 三处一致（`npm run check-version`）。
+- [ ] **在真实宿主里跑一遍单入口**：`check-install-reconcile.py` 验的是脚本行为，
       不等于 Claude Code / Cursor / Codex 等宿主真的能识别技能目录；需各挑一个工具实跑。
 
 ### P1 · 质量
@@ -68,7 +68,7 @@
       [多 AI 工具安装指南](install-by-tool.md) 的扫描路径表，两边都要；
       `npm run audit` 会拦单边修改。
 - [ ] **评测判定器**：目前本包只有评测文档与金标集，没有 `run-evals.py`；
-      若要机器判卷，可从 `shuhe-role-skills` 移植并适配 `.design/` 产物命名。
+      若要机器判卷，可移植并适配 `.design/` 产物命名。
 
 ---
 

@@ -3,7 +3,7 @@
   "owner": {
     "name": "数盒团队"
   },
-  "description": "全行业设计师技能包 — 三个公开入口：初始化 / 注册 / 更新",
+  "description": "全行业设计师技能包 — 单一入口（初始化 / 注册 / 更新合一）",
   "plugins": [
     {
       "name": "ai-design-skills",

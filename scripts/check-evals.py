@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 EVALS = ROOT / "evals"
-REGISTRY = ROOT / "skills" / "apply-design-skills" / "capabilities" / "design-core" / "disciplines.json"
+REGISTRY = ROOT / "skills" / "ai-design-skills" / "capabilities" / "design-core" / "disciplines.json"
 TRIGGERS = EVALS / "triggers.md"
 README = EVALS / "README.md"
 

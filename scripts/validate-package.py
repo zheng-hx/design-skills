@@ -3,7 +3,7 @@
 """validate-package.py — 技能源仓库的结构校验。
 
 管的是「装得上、结构对、公开/隐藏边界不破、生成物不漂移」：
-  1. 三个公开入口：SKILL.md + frontmatter(name/description) + agents/openai.yaml
+  1. 公开入口（单技能）：SKILL.md + frontmatter(name/description) + agents/openai.yaml
   2. 隐藏层边界：capabilities/ 下不得出现 SKILL.md（必须叫 CAPABILITY.md），
      技能模板必须是 .md.tpl，不能被工具直接扫成命令
   3. 注册表 → 生成物不漂移（跑 build-disciplines.py --check）
@@ -24,13 +24,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
-CAPS = SKILLS / "apply-design-skills" / "capabilities"
+CAPS = SKILLS / "ai-design-skills" / "capabilities"
 REGISTRY = CAPS / "design-core" / "disciplines.json"
 DISC_SKILLS = CAPS / "design-disciplines" / "skills"
 REFS = CAPS / "design-disciplines" / "references"
-RENDER = SKILLS / "apply-design-skills" / "scripts" / "render-design-package.py"
-BUILD = SKILLS / "apply-design-skills" / "scripts" / "build-disciplines.py"
-ENTRIES = ("apply-design-skills", "install-design-skills", "update-design-skills")
+RENDER = SKILLS / "ai-design-skills" / "scripts" / "render-design-package.py"
+BUILD = SKILLS / "ai-design-skills" / "scripts" / "build-disciplines.py"
+ENTRIES = ("ai-design-skills",)
 
 PLACEHOLDER_RE = re.compile(r"\{\{([A-Z_]+)\}\}")
 
@@ -117,7 +117,7 @@ def main() -> int:
             errs.append(f"core 工种 {k} 缺 agents/openai.yaml.tpl")
 
     # 8. 渲染内容不得残留旧包路径；.design/rules|references 引用必须可达
-    #    （抓的是「从 shuhe-role-skills 逐字复用规则、忘了把 .roles/ 改成 .design/」这类事故）
+    #    （抓的是「复用规则时忘了把 .roles/ 改成 .design/」这类路径残留事故）
     rule_files = {p.name for p in (CAPS / "design-core" / "rules").glob("*.md")}
     ref_files = {p.name for p in REFS.glob("*.md")}
     scanned = 0

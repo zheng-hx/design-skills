@@ -31,7 +31,7 @@
     "version": "python3 scripts/sync-version.py",
     "check-version": "python3 scripts/sync-version.py --check",
     "check": "python3 scripts/validate-package.py",
-    "verify-render": "python3 skills/apply-design-skills/scripts/render-design-package.py --project /tmp/ai-design-verify --disciplines ui-design,graphic-design --dry-run",
+    "verify-render": "python3 skills/ai-design-skills/scripts/render-design-package.py --project /tmp/ai-design-verify --disciplines ui-design,graphic-design --dry-run",
     "check-triggers": "python3 scripts/check-triggers.py",
     "check-evals": "python3 scripts/check-evals.py",
     "check-install": "python3 scripts/check-install-reconcile.py",

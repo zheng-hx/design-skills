@@ -3,7 +3,7 @@
 """sync-version.py — 版本号单一事实源同步。
 
 事实源：package.json 的 version。
-同步到：.claude-plugin/plugin.json 的 version、skills/apply-design-skills/VERSION。
+同步到：.claude-plugin/plugin.json 的 version、skills/ai-design-skills/VERSION。
 
 为什么需要 VERSION 文件：`npx skills add` **只拷贝技能目录**，
 仓库根的 package.json 带不过去——运行时版本戳必须住在技能目录里。
@@ -21,7 +21,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PKG = ROOT / "package.json"
 PLUGIN = ROOT / ".claude-plugin" / "plugin.json"
-VERSION = ROOT / "skills" / "apply-design-skills" / "VERSION"
+VERSION = ROOT / "skills" / "ai-design-skills" / "VERSION"
 
 
 def main() -> int:

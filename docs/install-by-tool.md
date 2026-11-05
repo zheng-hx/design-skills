@@ -2,14 +2,14 @@
 
 > 关键词：**先查看工具真实目录规则，再安装；只装检测到的工具目录，未检测到的不创建**。
 > 本包默认把设计师技能装到**用户全局**，装一次所有项目都能用。
-> 本文对应 `skills/install-design-skills/scripts/reconcile-skills.py` 与
+> 本文对应 `skills/ai-design-skills/scripts/reconcile-skills.py` 与
 > `tool-dirs.json` 的实际行为；两者不一致时以脚本与 `tool-dirs.json` 为准（`npm run audit` 会校验）。
 
 ---
 
 ## 1. 与旧包、与项目级模型的关键差异
 
-- **默认用户全局**：旧版 `shuhe-role-skills` 只写**项目内**目录、还明确「禁止写用户主目录」，
+- **默认用户全局**：旧版只写**项目内**目录、还明确「禁止写用户主目录」，
   结果换个项目就找不到命令——这正是「全局技能没生效」的头号根因。
   本包改为：工作台 `~/.design/` 与注册到各工具**用户全局技能目录**，装一次全局可用。
 - **按工具真实规则探测**：规则全部在 `tool-dirs.json`（单一事实源）。
@@ -47,14 +47,14 @@
 
 ## 3. 安装命令
 
-装到用户全局（默认），通常在 `/install-design-skills` 里自动跑，不需要手敲：
+装到用户全局（默认），由 `/ai-design-skills`（注册步骤）自动完成，不需要手敲：
 
 ```bash
 # 先探测本机有哪些工具（只读，不写任何文件）
-python3 <install-design-skills 技能目录>/scripts/probe-tool-dirs.py
+python3 <ai-design-skills 技能目录>/scripts/probe-tool-dirs.py
 
 # 默认：用户全局、自动探测
-python3 <install-design-skills 技能目录>/scripts/reconcile-skills.py --scope user
+python3 <ai-design-skills 技能目录>/scripts/reconcile-skills.py --scope user
 
 # 只装指定工具（显式指定即视为检测到）
 python3 reconcile-skills.py --scope user --tool workbuddy --tool codex
@@ -73,7 +73,7 @@ python3 reconcile-skills.py --scope user --home /tmp/fake-home --dry-run
 | `--home` / `--project` | 覆盖主目录 / 项目根（测试用，不碰真实环境） |
 | `--workbench` | 覆盖共享工作台路径（测试用） |
 | `--mode auto\|symlink\|copy` | 默认 `auto`：优先软链，不支持时自动回退 `copy` |
-| `--no-entries` | 不注册三个公开入口命令（默认注册） |
+| `--no-entries` | 不注册公开入口命令（默认注册） |
 | `--dry-run` | 只报告不落盘，先看会动哪些文件 |
 
 需要项目级工作台（团队共享）时加 `--scope project`，会把工作台放到 `<项目>/.design/`，
@@ -87,7 +87,7 @@ python3 reconcile-skills.py --scope user --home /tmp/fake-home --dry-run
 
 ```text
 期望集合   = ~/.design/skills/ 下所有含 SKILL.md 的工种技能（19 core + 路由 + 长尾兜底）
-            + 三个公开入口命令（apply / install / update）
+            + 唯一公开入口命令（ai-design-skills）
 本包拥有   = .design-managed.json 记录的 + 指向工作台/入口源的软链（含断链）
 ```
 
@@ -113,7 +113,7 @@ python3 reconcile-skills.py --scope user --home /tmp/fake-home --dry-run
   "package": "ai-design-skills",
   "scope": "user",
   "workbench": "/Users/you/.design",
-  "managed": ["design-router", "design-any", "ui-design", "apply-design-skills"],
+  "managed": ["design-router", "design-any", "ui-design", "ai-design-skills"],
   "modes": {"design-router": "symlink", "ui-design": "copy"}
 }
 ```
@@ -149,14 +149,6 @@ python3 reconcile-skills.py --scope user
 
 ---
 
-## 6. 与角色技能包共存
-
-| | 角色技能包（`shuhe-role-skills`） | 本包 |
-|---|---|---|
-| 工作台 | 项目 / 用户目录 `角色相关` | 用户全局 `~/.design/` |
-| 注册清单 | `.roles-managed.json` | `.design-managed.json` |
-| 入口 | `/install-role-skills` | `/install-design-skills` |
-
 两者**互不依赖、互不覆盖、互不清理对方的注册项**，可在同一环境同时安装。
 本包对账时只认自己的清单和指向 `~/.design/skills/` 的软链，别的一概不动。
 
@@ -164,11 +156,11 @@ python3 reconcile-skills.py --scope user
 
 ## 7. 版本升级时的注册
 
-`/update-design-skills` 的三层顺序固定：
+`/ai-design-skills` 的三层顺序固定：
 
 | 层 | 内容 | 方式 |
 |---|---|---|
-| ① 入口技能包 | 三个公开入口 | `npx skills add`（`update` 补不上新增技能） |
+| ① 入口技能包 | 唯一公开入口 | `npx skills add`（`update` 补不上新增技能） |
 | ② 共享工作台 | `~/.design/` 管理区 | 替换式重渲染，`<项目>/.design/artifacts/` **绝不覆盖** |
 | ③ 工具注册 | 所有检测到的工具**用户全局**目录 | `--scope user` 对账，多退少补 |
 
@@ -182,7 +174,7 @@ python3 reconcile-skills.py --scope user
 
 | 现象 | 原因 / 处理 |
 |---|---|
-| 报「未找到 ~/.design/skills/」 | 还没跑 `/apply-design-skills`，先生成工作台 |
+| 报「未找到 ~/.design/skills/」 | 还没跑 `/ai-design-skills`（初始化步骤），先生成工作台 |
 | 报「未检测到任何 AI 工具目录」 | 本机用户全局下没有对应工具根；先初始化对应工具，或用 `--tool` 指定 |
 | 命令在新工具里不出现 | 该工具是后来才装的；重跑一次 `--scope user` 即可 |
 | 软链变成实体目录 | 文件系统不支持软链，脚本回退了 `copy`；查清单 `modes` 确认 |

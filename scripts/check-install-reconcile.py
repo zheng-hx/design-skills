@@ -10,7 +10,7 @@
   3. 幂等复跑 0/0/0，且清单按技能记录真实 mode（修掉旧包把 copy 误报 symlink 的 bug）
   4. 改工种集合后清孤儿（多退少补）
   5. 用户自己放进工具目录的技能绝不被删
-  6. 与 shuhe-role-skills 的 .roles-managed.json 共存互不干扰
+  6. 与其他技能包的管理清单（.roles-managed.json 等）共存互不干扰
   7. copy 模式幂等不误报 mode
   8. 升级重渲染后 <项目>/.design/artifacts/ 里的作品一个不少
 
@@ -28,9 +28,9 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RULES = ROOT / "skills" / "install-design-skills" / "tool-dirs.json"
-RENDER = ROOT / "skills" / "apply-design-skills" / "scripts" / "render-design-package.py"
-RECON = ROOT / "skills" / "install-design-skills" / "scripts" / "reconcile-skills.py"
+RULES = ROOT / "skills" / "ai-design-skills" / "tool-dirs.json"
+RENDER = ROOT / "skills" / "ai-design-skills" / "scripts" / "render-design-package.py"
+RECON = ROOT / "skills" / "ai-design-skills" / "scripts" / "reconcile-skills.py"
 
 # 本机实测的 8 个工具 user 根目录；检测依据是「用户全局根目录是否存在」。
 ALL_USER_ROOTS = [
@@ -101,7 +101,7 @@ def main() -> int:
         out = run(RECON, "--scope", "user", "--home", str(home), "--project", str(proj))
         wbs = (home / ".workbuddy/skills").resolve()
         check(wbs.is_dir(), "WorkBuddy 全局技能目录已创建")
-        check(skill_count(wbs) == 24, f"WorkBuddy 装了 24 个技能（实际 {skill_count(wbs)}）")
+        check(skill_count(wbs) == 22, f"WorkBuddy 装了 22 个技能（实际 {skill_count(wbs)}）")
         check((wbs / ".design-managed.json").is_file(), "写了 .design-managed.json 清单")
         for rel in [agents_skills, "~/.claude/skills", "~/.cursor/skills", "~/.codex/skills",
                     "~/.openclaw/skills", "~/.codebuddy/skills", "~/.qoder/skills",
@@ -119,8 +119,8 @@ def main() -> int:
                   "--tool", "workbuddy", "--tool", "codex")
         ags = (home / ".agents/skills").resolve()
         check(ags.is_dir(), "Codex 的全局技能目录 ~/.agents/skills 已创建")
-        check(skill_count(ags) == 24, f"Codex 装了 24 个技能（实际 {skill_count(ags)}）")
-        check(skill_count(wbs) == 24, f"WorkBuddy 仍 24 个（实际 {skill_count(wbs)}）")
+        check(skill_count(ags) == 22, f"Codex 装了 22 个技能（实际 {skill_count(ags)}）")
+        check(skill_count(wbs) == 22, f"WorkBuddy 仍 22 个（实际 {skill_count(wbs)}）")
         # 注意：~/.codex/skills 不是技能发现目录，不应写入
         check(not (home / ".codex" / "skills").exists(), "未向旧版遗留 ~/.codex/skills 写入")
 
@@ -133,7 +133,7 @@ def main() -> int:
         man = json.loads((wbs / ".design-managed.json").read_text(encoding="utf-8"))
         check(man.get("scope") == "user", "清单 scope=user")
         check(man.get("modes", {}).get("ui-design") == "symlink", "清单按技能记录真实 mode=symlink")
-        check(len(man.get("managed", [])) == 24, f"清单 managed 24 项（实际 {len(man.get('managed', []))}）")
+        check(len(man.get("managed", [])) == 22, f"清单 managed 22 项（实际 {len(man.get('managed', []))}）")
 
         # ---------- 场景 4：改工种集合后清孤儿 ----------
         print("\n[场景 4] 缩小工种集合到 ui-design：清掉 18 个孤儿")
@@ -142,9 +142,9 @@ def main() -> int:
         out = run(RECON, "--scope", "user", "--home", str(home), "--project", str(proj),
                   "--tool", "workbuddy", "--tool", "codex")
         cs = counts(out)
-        # 期望 6 = ui-design + design-router + design-any + 3 入口命令；移除 24-6=18
-        check(skill_count(wbs) == 6, f"WorkBuddy 现 6 个（实际 {skill_count(wbs)}）")
-        check(skill_count(ags) == 6, f"Codex 现 6 个（实际 {skill_count(ags)}）")
+        # 期望 4 = ui-design + design-router + design-any + 1 入口命令；移除 22-4=18
+        check(skill_count(wbs) == 4, f"WorkBuddy 现 4 个（实际 {skill_count(wbs)}）")
+        check(skill_count(ags) == 4, f"Codex 现 4 个（实际 {skill_count(ags)}）")
         check(any(c == 18 for _, _, c in cs), f"移除 18 个孤儿（实际 {cs}）")
 
         # ---------- 场景 5：用户自己的技能绝不碰 ----------
@@ -159,15 +159,15 @@ def main() -> int:
         check("my-own-skill" not in (home / ".workbuddy/skills/.design-managed.json").read_text(encoding="utf-8"),
               "用户技能不在本包清单（本包绝不碰）")
 
-        # ---------- 场景 6：与角色包的 .roles-managed.json 共存 ----------
-        print("\n[场景 6] 与角色包 .roles-managed.json 共存互不干扰")
+        # ---------- 场景 6：与其他技能包的管理清单共存 ----------
+        print("\n[场景 6] 与其他技能包管理清单共存互不干扰")
         roles_man = wbs / ".roles-managed.json"
-        roles_man.write_text(json.dumps({"package": "shuhe-role-skills", "managed": ["foo"]},
+        roles_man.write_text(json.dumps({"package": "other-skills-package", "managed": ["foo"]},
                                         ensure_ascii=False), encoding="utf-8")
         run(RECON, "--scope", "user", "--home", str(home), "--project", str(proj),
             "--tool", "workbuddy")
         check(roles_man.is_file(), ".roles-managed.json 未被删除")
-        check(json.loads(roles_man.read_text(encoding="utf-8")).get("package") == "shuhe-role-skills",
+        check(json.loads(roles_man.read_text(encoding="utf-8")).get("package") == "other-skills-package",
               ".roles-managed.json 内容未变")
 
         # ---------- 场景 7：copy 模式幂等 ----------
@@ -199,8 +199,8 @@ def main() -> int:
         run(RECON, "--scope", "user", "--home", str(home), "--project", str(proj),
             "--tool", "workbuddy", "--tool", "codex")
         check(keep.is_file(), "用户在 artifacts/ 的作品升级后仍在")
-        # 24 个期望技能 + 用户自己的 my-own-skill（始终保留）= 25
-        check(skill_count(wbs) == 25, f"升级后 WorkBuddy 回到 24 个+用户技能（实际 {skill_count(wbs)}）")
+        # 22 个期望技能 + 用户自己的 my-own-skill（始终保留）= 23
+        check(skill_count(wbs) == 23, f"升级后 WorkBuddy 回到 22 个+用户技能（实际 {skill_count(wbs)}）")
         check((wbs / "brand-design").is_dir(), "升级后新增的 core 工种已注册")
         check(own.is_dir(), "用户自己的技能在升级后仍在")
 

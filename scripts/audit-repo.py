@@ -12,17 +12,15 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TOOL_DIRS = ROOT / "skills" / "install-design-skills" / "tool-dirs.json"
+TOOL_DIRS = ROOT / "skills" / "ai-design-skills" / "tool-dirs.json"
 DOC_TOOL = ROOT / "docs" / "install-by-tool.md"
 
 REQUIRED_FILES = (
     "README.md", "CHANGELOG.md", "LICENSE", "package.json",
     ".gitignore", ".npmignore", ".claude-plugin/plugin.json",
     ".claude-plugin/marketplace.json",
-    "skills/apply-design-skills/VERSION",
-    "skills/apply-design-skills/SKILL.md",
-    "skills/install-design-skills/SKILL.md",
-    "skills/update-design-skills/SKILL.md",
+    "skills/ai-design-skills/VERSION",
+    "skills/ai-design-skills/SKILL.md",
 )
 
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)#]+\.md)(?:#[^)]*)?\)")

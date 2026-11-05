@@ -5,7 +5,7 @@
 >
 > 覆盖 4 域 **37 个设计工种**，共用一套设计引擎；支持版本升级，支持按**各 AI 工具真实的技能目录规则**扫描安装。
 >
-> 本包只公开三个入口：`/apply-design-skills`（生成工作台）、`/install-design-skills`（注册到工具）、`/update-design-skills`（更新）。
+> 本包只公开一个入口：`/ai-design-skills`（初始化生成工作台 / 注册到工具 / 更新，三件事合一）。
 > 工种技能本身是**渲染出来的自包含模板**，生成后落在全局工作台。
 
 ## 它解决什么
@@ -73,12 +73,10 @@ npx skills@latest add <REPO_URL>
 然后在任意 AI 工具里（**装一次，所有项目可用**）：
 
 ```text
-/apply-design-skills     # 只确认启用哪些工种 → 生成用户全局工作台 ~/.design/
-/install-design-skills   # 按各工具真实目录规则探测 → 注册到你的 AI 工具全局目录，命令立即可用
-/update-design-skills    # 或直接说「更新设计技能」
+/ai-design-skills     # 确认工种 → 渲染全局工作台 ~/.design/ → 按各工具真实目录规则探测并注册；或直接说「更新设计技能」
 ```
 
-> `/apply-design-skills` 只问一次工种（默认 19 个 core），确认后直接渲染；
+> `/ai-design-skills` 只问一次工种（默认 19 个 core），确认后直接渲染；
 > 不会再追问公司、产品、责任人、术语表等信息。想装子集：`--disciplines ui-design,brand-design`。
 
 ## 全局安装（本包的关键改造）
@@ -88,8 +86,8 @@ npx skills@latest add <REPO_URL>
 只向检测到的工具目录建软链；未检测到的一律不创建。
 
 ```bash
-python3 <install-design-skills 技能目录>/scripts/probe-tool-dirs.py   # 只看本机有哪些工具
-python3 <install-design-skills 技能目录>/scripts/reconcile-skills.py --scope user
+python3 <ai-design-skills 技能目录>/scripts/probe-tool-dirs.py   # 只看本机有哪些工具
+python3 <ai-design-skills 技能目录>/scripts/reconcile-skills.py --scope user
 ```
 
 三个最常见坑（完整规则见 [多 AI 工具安装指南](docs/install-by-tool.md)）：
@@ -110,19 +108,19 @@ python3 <install-design-skills 技能目录>/scripts/reconcile-skills.py --scope
 | Reasonix | `~/.reasonix/skills` | `.reasonix/skills` |
 
 > 只用 WorkBuddy 时**绝不出现 `~/.agents/`**；同时用了 Codex，才创建 `~/.agents/skills`。
-> 三个公开入口命令（`apply` / `install` / `update`）默认一并注册，保证换到任何项目都能调用「全局初始化」。
+> 唯一公开入口命令（`ai-design-skills`）默认一并注册，保证换到任何项目都能调用「全局初始化」。
 
 对账是**声明式、幂等**的：多退少补、清孤儿、不清用户自己的技能；清单 `.design-managed.json`
 按技能记录真实安装模式（修掉旧版幂等时把 `copy` 误记成 `symlink` 的问题）。
 
 ## 版本与升级
 
-版本事实源是 `skills/apply-design-skills/VERSION`（住在技能目录里，因为
+版本事实源是 `skills/ai-design-skills/VERSION`（住在技能目录里，因为
 `npx skills add` 只拷技能目录，仓库根的 `package.json` 带不过去）。升级三层、顺序固定：
 
 | 层 | 内容 | 方式 |
 |---|---|---|
-| ① 入口技能包 | 三个公开入口 | `npx skills add`（`update` 补不上新增技能） |
+| ① 入口技能包 | 唯一公开入口 | `npx skills add`（`update` 补不上新增技能） |
 | ② 共享工作台 | `~/.design/` 管理区 | 替换式重渲染，`<项目>/.design/artifacts/` **绝不覆盖** |
 | ③ 工具注册 | 所有检测到的工具**用户全局**目录 | `--scope user` 对账，多退少补 |
 
@@ -134,19 +132,19 @@ python3 <install-design-skills 技能目录>/scripts/reconcile-skills.py --scope
 
 ```text
 skills/
-├── apply-design-skills/              # 公开入口①
-│   ├── SKILL.md  VERSION  agents/
-│   ├── scripts/
-│   │   ├── build-disciplines.py      # 从注册表生成工种模板（维护者用，含 --check）
-│   │   ├── render-design-package.py  # 渲染 + 逐字保真核对 + 结构校验
-│   │   └── verify-render.py
-│   └── capabilities/                 # 隐藏层（CAPABILITY.md / .md.tpl，不可被发现）
-│       ├── design-core/              #   公共引擎 + disciplines.json 注册表
-│       └── design-disciplines/       #   19 core 技能 + 2 入口 + 9 参考 + 产物模板
-├── install-design-skills/            # 公开入口②
-│   ├── tool-dirs.json                #   AI 工具目录规则（单一事实源）
-│   └── scripts/{reconcile-skills.py, probe-tool-dirs.py, tool_dirs.py}
-└── update-design-skills/             # 公开入口③
+└── ai-design-skills/                # 唯一公开入口（初始化 / 注册 / 更新 合一）
+    ├── SKILL.md  VERSION  agents/
+    ├── tool-dirs.json                #   AI 工具目录规则（单一事实源）
+    ├── scripts/
+    │   ├── build-disciplines.py      # 从注册表生成工种模板（维护者用，含 --check）
+    │   ├── render-design-package.py  # 渲染 + 逐字保真核对 + 结构校验
+    │   ├── verify-render.py
+    │   ├── reconcile-skills.py       # 按工具真实目录规则对账注册
+    │   ├── probe-tool-dirs.py        # 只读探测本机 AI 工具
+    │   └── tool_dirs.py              # 规则读取口
+    └── capabilities/                 # 隐藏层（CAPABILITY.md / .md.tpl，不可被发现）
+        ├── design-core/              #   公共引擎 + disciplines.json 注册表
+        └── design-disciplines/       #   19 core 技能 + 2 入口 + 9 参考 + 产物模板
 ```
 
 渲染产物（全局工作台 + 当前项目作品）：
@@ -160,20 +158,6 @@ skills/
 
 <当前项目>/.design/artifacts/         # ⚠️ 用户作品，按项目隔离，升级绝不覆盖
 ```
-
-## 与 shuhe-role-skills 共存
-
-| | 角色技能包 | 本包 |
-|---|---|---|
-| 工作台 | 项目 / 用户目录（角色相关） | 用户全局 `~/.design/` |
-| 组织 | 一个项目一个角色（5 选 1） | 一个包，包内按工种分技能 |
-| 注册清单 | `.roles-managed.json` | `.design-managed.json` |
-| 注册命令 | `/install-role-skills` | `/install-design-skills` |
-
-两者**互不依赖、互不覆盖、互不清理对方的注册项**，可在同一环境同时安装。
-5 份工种无关的引擎规则复用自 `shuhe-role-skills`（MIT），**并把产物路径对齐到 `~/.design/`、
-把「角色」措辞对齐为「工种」**（否则渲染后 AI 会按旧路径读不存在的文件）；2 份设计参考逐字复用。
-`npm run check` 会拦截渲染内容里残留的旧包路径与失效引用。
 
 ## 发布前校验
 
